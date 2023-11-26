@@ -1,0 +1,7 @@
+Formally, Natural Language Processing or NLP is defined as the 
+
+application of computational techniques for the analysis and 
+
+the synthesis of text. The aim of NLP is to give computers the 
+
+ability to do tasks involving human language.
