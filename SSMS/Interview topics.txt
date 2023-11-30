@@ -19,7 +19,7 @@ SCD--type1,2,3
 breake points
 check points
 Event handlers
-Precedence consraints
+Precedence constraints
 
 SSIS package configuration
 
