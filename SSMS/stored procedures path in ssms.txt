@@ -1,2 +1,0 @@
-Using SQL Server Management Studio
-Expand Databases, expand the database in which the procedure belongs, and then expand Programmability. Expand Stored Procedures, right-click the procedure and then select Script Stored Procedure as, and then select one of the following: Create To, Alter To, or Drop and Create To.
