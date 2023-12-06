@@ -1,0 +1,16 @@
+Difference betweeen procedure and store procedure
+
+The terms "procedure" and "stored procedure" are often used interchangeably, but there can be a subtle difference in how they are used in different contexts. Let's clarify the distinctions:
+
+Procedure:
+
+In a general sense, a "procedure" typically refers to a set of instructions or a sequence of actions that perform a specific task or function in a program or script.
+A "procedure" can be a generic term and might not refer specifically to a database concept.
+Procedures can exist in various programming languages and are not limited to databases. They can be used in applications, scripts, and more.
+Stored Procedure:
+
+A "stored procedure" is a specific database concept that is used within a database management system (DBMS) like MySQL, SQL Server, Oracle, or PostgreSQL.
+A "stored procedure" is a precompiled collection of one or more SQL statements and other procedural code that is stored and executed on the database server.
+Stored procedures are typically used to encapsulate a series of SQL statements into a reusable and efficient unit that can be called from within applications or scripts.
+Stored procedures are often used for tasks such as data retrieval, data modification, or business logic within the database.
+In summary, the key difference is that a "procedure" is a broader term that can refer to any sequence of actions in a program or script, while a "stored procedure" specifically refers to a database concept used to encapsulate and execute SQL and procedural code within a DBMS. When people commonly refer to "procedures" in the context of databases, they often mean "stored procedures."

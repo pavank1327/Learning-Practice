@@ -28,5 +28,15 @@ Q)Data connections modes:
 Q) Use of each modes - study this 
 
 
+1)how many ways to refresh the data in power-bi report?
+2)types of filters in power-bi
+3)add color to headers and row wise different(blue/light blue)
+
+
+Auto Sales data.csv
+
+
+
+
 
 
