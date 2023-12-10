@@ -36,6 +36,13 @@ Q) Use of each modes - study this
 Auto Sales data.csv
 
 
+Types of reports:
+
+1) drill down
+2)drill through
+3)Paginated reports
+
+
 
 
 
