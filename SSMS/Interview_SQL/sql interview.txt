@@ -449,6 +449,10 @@ Definition: RANK() assigns a unique rank to each distinct row based on the speci
 Behavior:
  If two or more rows have the same values, they receive the same rank, and the next rank is skipped.
 
+SELECT StudentID, Score, RANK() OVER (ORDER BY Score DESC) AS Ranking
+FROM Scores;
+
+
 DENSE_RANK():
 Definition: DENSE_RANK() also assigns a unique rank to each distinct row based on the specified column(s).
 Behavior:
@@ -456,6 +460,10 @@ Behavior:
 Example:
 Consider a table of sales data where multiple salespeople have the same sales amount. With RANK(), if two salespeople have the highest sales, they both get a rank of 1, and the next rank is 3. With DENSE_RANK(), they both get a rank of 1, and the next rank is 2.
 In summary, both RANK() and DENSE_RANK() assign ranks to rows, but RANK() may have gaps in the ranking sequence, while DENSE_RANK() produces consecutive ranks without gaps for rows with the same values.
+
+
+SELECT StudentID, Score, DENSE_RANK() OVER (ORDER BY Score DESC) AS Dense_Ranking
+FROM Scores;
 
 
 
