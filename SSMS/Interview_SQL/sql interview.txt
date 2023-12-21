@@ -19,7 +19,9 @@ Interview Topics:
 10)Variable creation
 11)Cursors
 12)Data Types
-
+13)User defined functions(UDF)
+14)Data import /export mechanism from one DB to another
+15)Diff b/w stored procedure and fucntions
 
 
 
@@ -93,6 +95,7 @@ Remember that the effectiveness of these strategies may vary depending on the sp
 
 
 2)Truncate load and full load:
+
 In SQL, the TRUNCATE TABLE statement is a Data Manipulation Language (DML) operation that deletes all rows of a table without causing a triggered action. The result of this operation quickly removes all data from a table, typically bypassing a number of integrity enforcing mechanisms.
 
 A target table is truncated before loading everything from the source. That's why this technique is also known as Destructive Load. In full load first we truncate the destination table and then we load all the data from source to destination. It is the simplest method to load the data from source to destination.
@@ -112,15 +115,20 @@ Truncate load is often used when you want to ensure that the target table is an 
 
 
 Key Differences:
+
 Data Handling:
+
 In a full load, all data is transferred from the source to the target, regardless of whether it has changed.
 In a truncate load, the target table is cleared (truncated) before loading the entire dataset.
 Efficiency:
+
 Full loads can be less efficient, especially when dealing with large datasets, as they transfer unchanged data.
 Truncate loads can be more efficient in terms of loading speed, as they remove the existing data and then insert the new data.
 Use Cases:
+
 Full loads are commonly used for initial data loads, periodic refreshes, or when dealing with small datasets.
 Truncate loads are suitable when you want to ensure a clean slate in the target table and when dealing with scenarios where updates and deletions are less frequent.
+
 It's important to note that the choice between full load and truncate load depends on the specific requirements of the data integration process and the characteristics of the data being transferred. In some cases, a combination of both strategies might be employed, depending on the nature of the data and the update patterns.
 
 
@@ -135,6 +143,7 @@ It's important to note that the choice between full load and truncate load depen
 
 
 3)Incremental load:
+
 Incremental Load means comparing the target table against the source data based on technical columns InsertionDate, UpdateDate, and DeletionDate. The logic is like below, If there are any New records in Source data, then we have to insert those records in the target table.
 Incremental loading refers to the process of loading only the data that has changed since the last load. This is in contrast to a full load, which loads all of the data in the source system into the data warehouse. You can use control tables to do incremental loading in PostgreSQL.
 
