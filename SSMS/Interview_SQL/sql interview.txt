@@ -19,9 +19,10 @@ Interview Topics:
 10)Variable creation
 11)Cursors
 12)Data Types
-13)User defined functions(UDF)
-14)Data import /export mechanism from one DB to another
-15)Diff b/w stored procedure and fucntions
+13)data import /export mechanism from one DB to another
+14)order by cannot be used with union know why
+15)Diff b/w stored procedure and functions SQL
+
 
 
 
@@ -95,7 +96,6 @@ Remember that the effectiveness of these strategies may vary depending on the sp
 
 
 2)Truncate load and full load:
-
 In SQL, the TRUNCATE TABLE statement is a Data Manipulation Language (DML) operation that deletes all rows of a table without causing a triggered action. The result of this operation quickly removes all data from a table, typically bypassing a number of integrity enforcing mechanisms.
 
 A target table is truncated before loading everything from the source. That's why this technique is also known as Destructive Load. In full load first we truncate the destination table and then we load all the data from source to destination. It is the simplest method to load the data from source to destination.
@@ -115,20 +115,15 @@ Truncate load is often used when you want to ensure that the target table is an 
 
 
 Key Differences:
-
 Data Handling:
-
 In a full load, all data is transferred from the source to the target, regardless of whether it has changed.
 In a truncate load, the target table is cleared (truncated) before loading the entire dataset.
 Efficiency:
-
 Full loads can be less efficient, especially when dealing with large datasets, as they transfer unchanged data.
 Truncate loads can be more efficient in terms of loading speed, as they remove the existing data and then insert the new data.
 Use Cases:
-
 Full loads are commonly used for initial data loads, periodic refreshes, or when dealing with small datasets.
 Truncate loads are suitable when you want to ensure a clean slate in the target table and when dealing with scenarios where updates and deletions are less frequent.
-
 It's important to note that the choice between full load and truncate load depends on the specific requirements of the data integration process and the characteristics of the data being transferred. In some cases, a combination of both strategies might be employed, depending on the nature of the data and the update patterns.
 
 
@@ -143,7 +138,6 @@ It's important to note that the choice between full load and truncate load depen
 
 
 3)Incremental load:
-
 Incremental Load means comparing the target table against the source data based on technical columns InsertionDate, UpdateDate, and DeletionDate. The logic is like below, If there are any New records in Source data, then we have to insert those records in the target table.
 Incremental loading refers to the process of loading only the data that has changed since the last load. This is in contrast to a full load, which loads all of the data in the source system into the data warehouse. You can use control tables to do incremental loading in PostgreSQL.
 
@@ -458,10 +452,6 @@ Definition: RANK() assigns a unique rank to each distinct row based on the speci
 Behavior:
  If two or more rows have the same values, they receive the same rank, and the next rank is skipped.
 
-SELECT StudentID, Score, RANK() OVER (ORDER BY Score DESC) AS Ranking
-FROM Scores;
-
-
 DENSE_RANK():
 Definition: DENSE_RANK() also assigns a unique rank to each distinct row based on the specified column(s).
 Behavior:
@@ -469,10 +459,6 @@ Behavior:
 Example:
 Consider a table of sales data where multiple salespeople have the same sales amount. With RANK(), if two salespeople have the highest sales, they both get a rank of 1, and the next rank is 3. With DENSE_RANK(), they both get a rank of 1, and the next rank is 2.
 In summary, both RANK() and DENSE_RANK() assign ranks to rows, but RANK() may have gaps in the ranking sequence, while DENSE_RANK() produces consecutive ranks without gaps for rows with the same values.
-
-
-SELECT StudentID, Score, DENSE_RANK() OVER (ORDER BY Score DESC) AS Dense_Ranking
-FROM Scores;
 
 
 
@@ -586,9 +572,6 @@ A cursor in SQL Server is a database object that allows us to retrieve each row 
 
 The SQL Server cursor's purpose is to update the data row by row, change it, or perform calculations that are not possible when we retrieve all records at once. It's also useful for performing administrative tasks like SQL Server database backups in sequential order. Cursors are mainly used in the development, DBA, and ETL processes.
 
-What is meant by cursor in SQL?
-Cursor is a Temporary Memory or Temporary Work Station. It is Allocated by Database Server at the Time of Performing DML(Data Manipulation Language) operations on the Table by the User. Cursors are used to store Database Tables. There are 2 types of Cursors: Implicit Cursors, and Explicit Cursors.
-
 Cursor Life Cycle:
  
 
@@ -690,3 +673,48 @@ Aims to enhance query performance by minimizing the need for joins and simplifyi
 Example:
  In a denormalized design, you might store redundant information, like customer addresses, directly in the customer table to avoid joins during read operations.
 Emphasis: Emphasizes optimizing read operations, simplifying queries, and potentially increasing data redundancy for the sake of performance gains.
+
+
+Diff b/w stored procedure and fucntions sql:
+In SQL, stored procedures and functions are both database objects that contain a collection of SQL statements. However, there are some key differences between stored procedures and functions. Here are the main distinctions:
+
+Return Type:
+Stored Procedure: 
+Can return zero or more values. You typically use OUTPUT parameters to return values.
+Function: 
+Must return a single value. This can be a scalar value or a table (in the case of table-valued functions).
+Usage in Queries:
+Stored Procedure: 
+Can be called using the EXECUTE statement or simply the procedure name. Can also be used in a SELECT statement.
+Function:
+ Can be used in a SELECT statement or other T-SQL statements where an expression is allowed.
+Transaction Control:
+Stored Procedure:
+ Can contain transaction control statements such as COMMIT and ROLLBACK. You can control transactions explicitly within a stored procedure.
+Function:
+ Generally, functions do not contain transaction control statements. They are designed to be deterministic and, as such, do not perform actions that would affect the state of the database.
+Error Handling:
+Stored Procedure: 
+Can use TRY...CATCH blocks for error handling. You can catch and handle errors within a stored procedure.
+Function:
+ Limited error handling capabilities compared to stored procedures. Usually, errors propagate to the calling environment.
+Permissions:
+
+Stored Procedure: 
+Can be executed with explicit permission granted to users. The permissions can be granted on the procedure itself.
+Function: 
+Generally requires permission to execute, but the permissions are granted on the function. Also, functions are often used in SELECT statements, so users need permission on the underlying tables.
+Location in SQL Statements:
+
+Stored Procedure:
+ Can be called from various places in a SQL script or application, including within other stored procedures, triggers, or directly in a SQL query.
+Function: 
+Can be used directly in a SELECT, INSERT, UPDATE, or DELETE statement or within another function.
+Alteration and Execution:
+
+Stored Procedure:
+ Can be altered using the ALTER PROCEDURE statement. Can be executed using the EXECUTE statement.
+Function: 
+Can be altered using the ALTER FUNCTION statement. Can be executed directly in a SQL query.
+
+Remember that the specifics can vary depending on the database management system (DBMS) you are using, as different database systems have their own implementations and variations of stored procedures and functions.
