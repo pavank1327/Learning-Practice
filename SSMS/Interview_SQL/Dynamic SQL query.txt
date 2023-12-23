@@ -1,0 +1,74 @@
+A dynamic SQL query is a query that is constructed and executed at runtime,
+ allowing for flexibility in building the query based on certain conditions or user inputs.
+ Dynamic SQL is often used when the structure of the query is not known until runtime.
+ Below is a simple example of a dynamic SQL query using a stored procedure in SQL Server.
+
+
+
+
+
+
+
+CREATE PROCEDURE SearchEmployees
+    @FirstName NVARCHAR(50) = NULL,
+    @LastName NVARCHAR(50) = NULL,
+    @DepartmentID INT = NULL
+AS
+BEGIN
+    DECLARE @SqlQuery NVARCHAR(MAX)
+
+    SET @SqlQuery = 'SELECT * FROM Employees WHERE 1 = 1'
+
+    IF @FirstName IS NOT NULL
+        SET @SqlQuery = @SqlQuery + ' AND FirstName = @FirstName'
+
+    IF @LastName IS NOT NULL
+        SET @SqlQuery = @SqlQuery + ' AND LastName = @LastName'
+
+    IF @DepartmentID IS NOT NULL
+        SET @SqlQuery = @SqlQuery + ' AND DepartmentID = @DepartmentID'
+
+    EXEC sp_executesql @SqlQuery,
+                       N'@FirstName NVARCHAR(50), @LastName NVARCHAR(50), @DepartmentID INT',
+                       @FirstName, @LastName, @DepartmentID
+END
+	
+
+
+-- Search employees with a specific first name
+EXEC SearchEmployees @FirstName = 'John';
+
+-- Search employees with a specific last name and department
+EXEC SearchEmployees @LastName = 'Doe', @DepartmentID = 1;
+
+
+
+
+
+
+
+
+
+
+
+
+disadavantages of dynamic sql query:
+
+
+While dynamic SQL queries offer flexibility and customization at runtime, they come with some disadvantages and potential risks:
+
+Security Concerns (SQL Injection): One of the major disadvantages of dynamic SQL is the risk of SQL injection. If user inputs are not properly validated and sanitized before being incorporated into dynamic queries, malicious users could manipulate the input to execute arbitrary SQL code, leading to unauthorized access or data manipulation.
+
+Readability and Maintainability: Dynamic SQL queries can be more challenging to read and maintain compared to static queries written directly in the code. It may be harder to troubleshoot issues or understand the logic of the query, especially as the complexity of the dynamic query increases.
+
+Performance Overhead: Dynamic SQL queries can have performance overhead, especially if the queries need to be recompiled each time they are executed. The database engine may struggle to optimize the query plan, leading to suboptimal performance.
+
+Lack of Compile-Time Checking: Since dynamic SQL queries are constructed and executed at runtime, any syntax errors or issues in the query may not be detected until runtime. This lack of compile-time checking can lead to errors that are harder to catch and debug.
+
+Limited Tool Support: Some database development tools and query analyzers may not provide adequate support for dynamic SQL, making it more challenging to analyze and optimize dynamic queries.
+
+Complexity and Maintenance Overhead: Managing and maintaining a system that relies heavily on dynamic SQL can be complex. As the codebase grows, the dynamic queries may become harder to manage, and changes to the database schema could require updates to multiple dynamic queries.
+
+Potential for Plan Cache Pollution: The use of dynamic SQL may lead to plan cache pollution, where a large number of similar, yet different, queries are executed. This can result in inefficient use of memory and resources in the database engine's plan cache.
+
+Despite these disadvantages, dynamic SQL can be a powerful tool when used appropriately and with caution. Developers should be aware of the potential risks and take steps to mitigate them, such as validating and parameterizing user inputs, using parameterized queries, and implementing proper error handling.
