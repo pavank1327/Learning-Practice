@@ -1,3 +1,11 @@
+-- Drop database if exists
+-- DROP DATABASE IF EXISTS PavanK;
+
+-- Create new database
+CREATE DATABASE PavanK;
+
+
+
 use PavanK
 
 select *

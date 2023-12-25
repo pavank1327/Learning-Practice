@@ -11,33 +11,45 @@
   DTS:LocaleID="16393"
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
-  DTS:VersionBuild="2"
-  DTS:VersionGUID="{B2114FDE-16F6-4E52-8168-320A15BA8689}">
+  DTS:VersionBuild="7"
+  DTS:VersionGUID="{81532CD7-A047-473E-832A-62AEB5ABEC89}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
     <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[PRESTO\SQLEXPRESS01.Pavank]"
+      DTS:refId="Package.ConnectionManagers[PAVAN_K\SQLEXPRESS01]"
       DTS:CreationName="OLEDB"
-      DTS:DTSID="{25EC1674-CBDB-4740-9FE3-94DF61EECFF8}"
-      DTS:ObjectName="PRESTO\SQLEXPRESS01.Pavank">
+      DTS:DTSID="{1FAEEF07-BCA5-4061-8992-D562ECE877D3}"
+      DTS:ObjectName="PAVAN_K\SQLEXPRESS01">
       <DTS:ObjectData>
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
           DTS:ConnectRetryInterval="5"
-          DTS:ConnectionString="Data Source=PRESTO\SQLEXPRESS01;Initial Catalog=Pavank;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package1-{25EC1674-CBDB-4740-9FE3-94DF61EECFF8}PRESTO\SQLEXPRESS01.Pavank;Auto Translate=False;" />
+          DTS:ConnectionString="Data Source=PAVAN_K\SQLEXPRESS01;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package1-{1FAEEF07-BCA5-4061-8992-D562ECE877D3}PAVAN_K\SQLEXPRESS01;Auto Translate=False;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[PRESTO\SQLEXPRESS01.PavanK_dest]"
+      DTS:refId="Package.ConnectionManagers[PAVAN_K\SQLEXPRESS01.PavanK]"
       DTS:CreationName="OLEDB"
-      DTS:DTSID="{3F21A189-7D4F-430C-8A80-A55FAAA208EE}"
-      DTS:ObjectName="PRESTO\SQLEXPRESS01.PavanK_dest">
+      DTS:DTSID="{A260F616-D0D8-4F36-A52F-CA42B00CA2CD}"
+      DTS:ObjectName="PAVAN_K\SQLEXPRESS01.PavanK">
       <DTS:ObjectData>
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
           DTS:ConnectRetryInterval="5"
-          DTS:ConnectionString="Data Source=PRESTO\SQLEXPRESS01;Initial Catalog=PavanK_dest;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package1-{3F21A189-7D4F-430C-8A80-A55FAAA208EE}PRESTO\SQLEXPRESS01.PavanK_dest;Auto Translate=False;" />
+          DTS:ConnectionString="Data Source=PAVAN_K\SQLEXPRESS01;Initial Catalog=PavanK;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package1-{A260F616-D0D8-4F36-A52F-CA42B00CA2CD}PAVAN_K\SQLEXPRESS01.PavanK;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[PAVAN_K\SQLEXPRESS01.Pavank_Dest]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{DAF1C0E9-27B2-4551-8601-F03A18935710}"
+      DTS:ObjectName="PAVAN_K\SQLEXPRESS01.Pavank_Dest">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=PAVAN_K\SQLEXPRESS01;Initial Catalog=Pavank_Dest;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package1-{DAF1C0E9-27B2-4551-8601-F03A18935710}PAVAN_K\SQLEXPRESS01.Pavank_Dest;Auto Translate=False;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
@@ -95,7 +107,7 @@
                   dataType="System.Int32"
                   description="Specifies the mode used to access the database."
                   name="AccessMode"
-                  typeConverter="AccessMode">3</property>
+                  typeConverter="AccessMode">0</property>
                 <property
                   dataType="System.Boolean"
                   description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
@@ -116,8 +128,8 @@
               <connections>
                 <connection
                   refId="Package\Data Flow Task\OLE DB Destination.Connections[OleDbConnection]"
-                  connectionManagerID="Package.ConnectionManagers[PRESTO\SQLEXPRESS01.PavanK_dest]"
-                  connectionManagerRefId="Package.ConnectionManagers[PRESTO\SQLEXPRESS01.PavanK_dest]"
+                  connectionManagerID="Package.ConnectionManagers[PAVAN_K\SQLEXPRESS01.Pavank_Dest]"
+                  connectionManagerRefId="Package.ConnectionManagers[PAVAN_K\SQLEXPRESS01.Pavank_Dest]"
                   description="The OLE DB runtime connection used to access the database."
                   name="OleDbConnection" />
               </connections>
@@ -265,8 +277,8 @@
               <connections>
                 <connection
                   refId="Package\Data Flow Task\OLE DB Source.Connections[OleDbConnection]"
-                  connectionManagerID="Package.ConnectionManagers[PRESTO\SQLEXPRESS01.Pavank]"
-                  connectionManagerRefId="Package.ConnectionManagers[PRESTO\SQLEXPRESS01.Pavank]"
+                  connectionManagerID="Package.ConnectionManagers[PAVAN_K\SQLEXPRESS01.PavanK]"
+                  connectionManagerRefId="Package.ConnectionManagers[PAVAN_K\SQLEXPRESS01.PavanK]"
                   description="The OLE DB runtime connection used to access the database."
                   name="OleDbConnection" />
               </connections>
@@ -422,8 +434,25 @@
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
-          SQLTask:Connection="{3F21A189-7D4F-430C-8A80-A55FAAA208EE}"
-          SQLTask:SqlStatementSource="TRUNCATE TABLE Dest_Employee;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          SQLTask:Connection="{1FAEEF07-BCA5-4061-8992-D562ECE877D3}"
+          SQLTask:SqlStatementSource="use PavanK_Dest&#xA;&#xA;TRUNCATE TABLE Dest_Employee;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Execute SQL Task 1"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{014d4203-f0ae-4c11-9c50-76a3590f4f38}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Execute SQL Task 1"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{1FAEEF07-BCA5-4061-8992-D562ECE877D3}"
+          SQLTask:SqlStatementSource="use PavanK_Dest&#xA;&#xA;TRUNCATE TABLE Dest_Employee;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
   </DTS:Executables>
@@ -431,10 +460,18 @@
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint]"
       DTS:CreationName=""
-      DTS:DTSID="{4232FC54-C8AA-4E00-AE5B-F0D5C5EBC48F}"
-      DTS:From="Package\Execute SQL Task"
+      DTS:DTSID="{F07BB28B-4BE5-4A74-B4A6-EFCDC3ACFC64}"
+      DTS:From="Package\Data Flow Task"
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint"
+      DTS:To="Package\Execute SQL Task" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{FC69C094-BD17-42C7-A716-7D778719B8EB}"
+      DTS:From="Package\Execute SQL Task 1"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
       DTS:To="Package\Data Flow Task" />
   </DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
@@ -448,41 +485,79 @@
     design-time-name="Package">
     <LayoutInfo>
       <GraphLayout
-        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
-          Size="152,42.6666666666667"
+          Size="150.4,41.6"
           Id="Package\Data Flow Task"
-          TopLeft="160.624997606501,114.399997954369" />
+          TopLeft="252.767856318542,118.988233312835" />
         <NodeLayout
-          Size="164,42.6666666666667"
+          Size="164,42.4"
           Id="Package\Execute SQL Task"
-          TopLeft="189.374997178093,31.1999994421005" />
+          TopLeft="266.517855634685,213.200001994582" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint]"
-          TopLeft="271.374997178093,73.8666661087672">
+          TopLeft="327.967856318542,160.588233312835">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-34.7499995715916,40.5333318456014"
+              EndConnector="20.5499993161434,52.6117686817469"
               Start="0,0"
-              End="-34.7499995715916,33.0333318456014">
+              End="20.5499993161434,45.1117686817469">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,16.2666659228007" />
+                    End="0,22.3058843408734" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,16.2666659228007"
-                    Point2="0,20.2666659228007"
-                    Point3="-4,20.2666659228007" />
+                    Point1="0,22.3058843408734"
+                    Point2="0,26.3058843408734"
+                    Point3="4,26.3058843408734" />
                   <mssgle:LineSegment
-                    End="-30.7499995715916,20.2666659228007" />
+                    End="16.5499993161434,26.3058843408734" />
                   <mssgle:CubicBezierSegment
-                    Point1="-30.7499995715916,20.2666659228007"
-                    Point2="-34.7499995715916,20.2666659228007"
-                    Point3="-34.7499995715916,24.2666659228007" />
+                    Point1="16.5499993161434,26.3058843408734"
+                    Point2="20.5499993161434,26.3058843408734"
+                    Point3="20.5499993161434,30.3058843408734" />
                   <mssgle:LineSegment
-                    End="-34.7499995715916,33.0333318456014" />
+                    End="20.5499993161434,45.1117686817469" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="164,42.4"
+          Id="Package\Execute SQL Task 1"
+          TopLeft="33.4821382984139,13.5411742289091" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="115.482138298414,55.9411742289091">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="212.485718020128,63.0470590839258"
+              Start="0,0"
+              End="212.485718020128,55.5470590839258">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,27.5235295419629" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,27.5235295419629"
+                    Point2="0,31.5235295419629"
+                    Point3="4,31.5235295419629" />
+                  <mssgle:LineSegment
+                    End="208.485718020128,31.5235295419629" />
+                  <mssgle:CubicBezierSegment
+                    Point1="208.485718020128,31.5235295419629"
+                    Point2="212.485718020128,31.5235295419629"
+                    Point3="212.485718020128,35.5235295419629" />
+                  <mssgle:LineSegment
+                    End="212.485718020128,55.5470590839258" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -500,13 +575,13 @@
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
-          Size="150.666666666667,42.6666666666667"
-          Id="Package\Data Flow Task\OLE DB Source"
-          TopLeft="196.874997066334,44.8499991980195" />
-        <NodeLayout
-          Size="172,42.6666666666667"
+          Size="172,42.4"
           Id="Package\Data Flow Task\OLE DB Destination"
           TopLeft="278.124995855615,204.749996338785" />
+        <NodeLayout
+          Size="150.4,42.4"
+          Id="Package\Data Flow Task\OLE DB Source"
+          TopLeft="196.874997066334,44.8499991980195" />
         <EdgeLayout
           Id="Package\Data Flow Task.Paths[OLE DB Source Output]"
           TopLeft="272.208330399667,87.5166658646862">
@@ -545,7 +620,7 @@
     </LayoutInfo>
   </TaskHost>
   <PipelineComponentMetadata
-    design-time-name="Package\Data Flow Task\OLE DB Source">
+    design-time-name="Package\Data Flow Task\OLE DB Destination">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -558,7 +633,7 @@
     </Properties>
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
-    design-time-name="Package\Data Flow Task\OLE DB Destination">
+    design-time-name="Package\Data Flow Task\OLE DB Source">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
