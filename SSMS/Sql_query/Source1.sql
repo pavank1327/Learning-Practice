@@ -1,7 +1,12 @@
 use Pavank
 
 -- Create the stage_Employee table
-CREATE TABLE Source_Employee
+drop table IF EXISTS Source_Employee
+CREATE Source_Employee;
+
+
+ use PavanK
+create TABLE Source_Employee
 (
     [EmpNo] INT,
     [Ename] VARCHAR(MAX),
@@ -11,6 +16,8 @@ CREATE TABLE Source_Employee
 );
 
 -- Insert some sample values
+
+use PavanK
 INSERT INTO Source_Employee ([EmpNo], [Ename], [Esalary], [EDeptID], [Country])
 VALUES
     (101, 'John Doe', 50000.00, 1, 'USA'),
@@ -19,7 +26,16 @@ VALUES
     (104, 'Alice Brown', 70000.00, 3, 'Australia'),
 	 (105, 'Alice Brain', 70000.01, 3, 'Austin');
 
+
+use PavanK
 INSERT INTO Source_Employee ([EmpNo], [Ename], [Esalary], [EDeptID], [Country])
 VALUES
  (105, 'Alice Brain', 70000.01, 3, 'Austin');
+
+
+ use PavanK
+ -- Drop the table if it exists
+IF OBJECT_ID('Source_Employee', 'U') IS NOT NULL
+    DROP TABLE Source_Employee;
+
 
