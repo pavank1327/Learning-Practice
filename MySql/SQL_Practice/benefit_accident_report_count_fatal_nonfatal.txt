@@ -1,0 +1,54 @@
+select tbo.Location_Name as RO_SRO, efd.fact_estab_name as Industry_Name, year(b.created_datetime) as yearr,
+count(b.pk),
+(sum(case when b.injury_nature like 'non fatal%' then 1 else 0 end) +
+sum(case when b.injury_nature like 'no fatal%' then 1 else 0 end) +
+sum(case when b.injury_nature like 'not fatal%' then 1 else 0 end)) as 'TotalNonFatal',
+(count(b.pk)-(sum(case when b.injury_nature like 'non fatal%' then 1 else 0 end)  +
+sum(case when b.injury_nature like 'no fatal%' then 1 else 0 end) +
+sum(case when b.injury_nature like 'not fatal%' then 1 else 0 end) )) as 'TotalFatalCount'
+from benefit_accident_report b
+inner join empe_reg_details e on e.pk=b.empe_reg_details_fk  and e.active=1
+inner join empe_empr_details eed on eed.empe_reg_details_fk=e.pk and eed.active=1
+inner join empr_master em on em.pk=eed.empr_master_fk
+inner join empr_factory_details efd on efd.empr_master_fk=em.pk and efd.active=1
+inner join tbllocation tb on em.branch_office_fk=tb.pk and tb.active='Yes'
+inner join tbllocation tbo on tb.Reporting_Office=tbo.pk and tbo.active='Yes'
+where date(b.created_datetime) between '2021-01-01' and '2023-11-30' and b.injury_nature like '%fatal%'
+group by 1,2,3
+
+union
+
+select tbo.Location_Name as RO_SRO, efd.fact_estab_name as Industry_Name, year(b.created_datetime) as yearr,
+count(b.pk),
+(sum(case when b.injury_nature like 'non fatal%' then 1 else 0 end) +
+sum(case when b.injury_nature like 'no fatal%' then 1 else 0 end) +
+sum(case when b.injury_nature like 'not fatal%' then 1 else 0 end)) as 'TotalNonFatal',
+(count(b.pk)-(sum(case when b.injury_nature like 'non fatal%' then 1 else 0 end)  +
+sum(case when b.injury_nature like 'no fatal%' then 1 else 0 end) +
+sum(case when b.injury_nature like 'not fatal%' then 1 else 0 end) )) as 'TotalFatalCount'
+from benefit_accident_report b
+inner join empe_reg_details e on e.pk=b.empe_reg_details_fk  and e.active=1
+inner join empe_empr_details eed on eed.empe_reg_details_fk=e.pk and eed.active=1
+inner join empr_subunit_details em on em.pk=eed.empr_subunit_details_fk and em.active=1
+inner join empr_factory_details efd on efd.empr_master_fk=em.pk and efd.active=1
+inner join tbllocation tb on em.branch_office_fk=tb.pk and tb.active='Yes'
+inner join tbllocation tbo on tb.Reporting_Office=tbo.pk and tbo.active='Yes'
+where date(b.created_datetime) between '2021-01-01' and '2023-11-30' and b.injury_nature like '%fatal%'
+group by 1,2,3;
+-
+
+----
+
+select tbo.Location_Name as RO_SRO, efd.fact_estab_name as Industry_Name, year(b.created_datetime) 'year',
+
+count(case when b.injury_nature like 'fatal%' then 1 end) as nooffatalcases,
+count(case when b.injury_nature like 'nonfatal%' then 1 end) as noofnonfatalcases
+from benefit_accident_report b
+inner join empe_reg_details e on e.pk=b.empe_reg_details_fk  and e.active=1 
+inner join empe_empr_details eed on eed.empe_reg_details_fk=e.pk and eed.active=1
+inner join empr_master em on em.pk=eed.empr_master_fk
+inner join empr_factory_details efd on efd.empr_master_fk=em.pk and efd.active=1
+inner join tbllocation tb on em.branch_office_fk=tb.pk and tb.active='Yes'
+inner join tbllocation tbo on tb.Reporting_Office=tbo.pk and tbo.active='Yes'
+where date(b.created_datetime) between '2021-01-01' and '2023-11-30'
+group by 1,2,3;

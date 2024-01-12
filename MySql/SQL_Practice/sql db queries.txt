@@ -1,0 +1,135 @@
+select * from empe_reg_details limit 100;
+
+select * from empe_reg_details where empe_ip_number='1111111111';
+
+select * from benefit_claim_master limit 100;
+desc benefit_claim_master;
+
+select * from benefit_claim_master where empe_reg_details_fk = 1;
+
+show table status like '%claim%';
+select * from task_status_master;
+
+select * from benefit_claim_master  where empe_reg_details_fk= 1 and claim_status=3 and
+created_datetime between '2023-11-01 00:00:00' and '2023-11-30 23:59:59';
+
+select * from empe_reg_details where empe_ip_number='1114216776';
+
+select * from benefit_claim_master where empe_reg_details_fk = 2 and
+created_datetime between '2023-10-01 00:00:00' and '2023-11-30 23:59:59';
+
+
+----claims count 1---
+
+SELECT e.empe_ip_number AS IP_No,u.benefit_sub_type_name AS benefit_sub_type_name, 
+ h.`benefit_type`AS Benefit_type_master_Name,
+
+ COUNT(m.pk)
+ FROM empe_reg_details e
+INNER JOIN benefit_claim_master m ON m.empe_reg_details_fk=e.pk
+
+INNER JOIN benefit_sub_type u ON u.pk=m.benefit_sub_type_fk
+INNER JOIN benefit_type_master h ON h.pk=m.benefit_type_master_fk
+ GROUP BY e.empe_ip_number,u.benefit_sub_type_name;
+
+--2. challan count--
+empr_master
+empr_sub_unit_details
+revenue_challan
+
+select e.empr_code,count(r.pk)
+from revenue_challan r
+inner join empr_master e on e.pk=empr_master_fk
+group by e.empr_code ;
+
+
+---
+
+
+select e.empr_code,sum(r.challan_amount) as total_challan_amount,count(r.pk)
+from revenue_challan r
+inner join empr_master e on e.pk=empr_master_fk
+where r.created_datetime between '2023-09-01 00:00:00' and '2023-11-30 23:59:59'
+group by e.empr_code
+
+union
+
+select s.sub_code,sum(r.challan_amount) as total_challan_amount,count(r.pk)
+from revenue_challan r
+inner join empr_subunit_details s on s.pk=r.empr_subunit_details_fk
+where r.created_datetime between '2023-09-01 00:00:00' and '2023-11-30 23:59:59'
+group by s.sub_code;
+
+---karishma task
+---1. location wise employer count ---
+
+select tbl.Location_Name 'RO/SRO',count(em.pk) from empr_master em
+inner join esicinsurance.tbllocation tbl on tbl.pk=em.region_fk and tbl.active='YES'
+group by tbl.location_name
+
+union
+
+select tbl.Location_Name 'RO/SRO',count(em.pk) from empr_subunit_details em
+inner join esicinsurance.tbllocation tbl on tbl.pk=em.region_fk and tbl.active='YES'
+group by tbl.location_name;
+
+---location wise  employee count----
+
+select * from empe_reg_details limit 100;
+select * from tbllocation limit 100;
+
+select * from tbllocation where tbllocationtype_pk=5;
+
+select DISTINCT tbl1.Location_Name 'RO/SRO', tbl.location_name 'BO', count(1) from tbllocation tbl
+inner join empe_reg_details erd on erd.branch_office_fk=tbl.pk and erd.active=1
+inner join tbllocation tbl1 on tbl1.pk=tbl.reporting_office and tbl.active='YES' and   tbl1.active='YES'
+where tbl.tbllocationtype_pk='4'   and tbl.active='YES'
+group by tbl.location_name limit 100;
+
+
+
+
+----
+CREATE DEFINER=`dbdevl4`@`%` PROCEDURE `pr_c18c19register_final`()
+begin
+
+call pr_insertc1819reg();
+call pr_updtc1819reg();
+
+end
+----
+
+
+---region wise defaulter list count employer count 
+
+
+select tb.location_name,sum(r.defaulting_amount) as default_amount,count(e.pk)
+from revenue_defaulter_list r
+inner join tbllocation tb on tb.pk=r.region_fk
+inner join empr_master e on e.pk=r.empr_master_fk
+group by tb.location_name;  
+----
+select  tb.Location_Name, SUM(r.defaulting_amount), COUNT(em.pk) 
+from revenue_defaulter_list r
+join tbllocation tb on tb.pk = r.region_fk
+join empr_master em  on em.pk = r.empr_master_fk
+where r.defaulting_year='2023'and r.defaulting_month in('9','10','11')
+group by  tb.Location_Name
+
+union
+
+select  tb.Location_Name, SUM(r.defaulting_amount), COUNT(em.pk) 
+from revenue_defaulter_list r
+join tbllocation tb on tb.pk = r.region_fk
+join empr_subunit_details s on s.pk=r.empr_subunit_details_fk
+INNER JOIN empr_master em  ON em.pk = r.empr_master_fk
+where r.defaulting_year='2023' and r.defaulting_month in ('9','10','11')
+group by tb.Location_Name;
+---
+select l.empr_code, l.defaulting_year,l.defaulting_month,l.defaulting_type,
+tbl.Location_Name from revenue_defaulter_list l 
+join empr_master em  on em.pk= l.empr_master_fk 
+join tbllocation tbl on tbl.pk = l.region_fk
+where l.defaulting_year='2023' and l.defaulting_month in ('11','10','9');
+
+----

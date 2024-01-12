@@ -1,0 +1,66 @@
+select * from revenue_live_list_special_case_payment limit 100;
+select * from empr_master where empr_code='18000002750000006';
+desc empr_master;
+desc empe_reg_details;
+desc empr_factory_details;
+desc benefit_claim_master;
+desc empe_personal_details;
+desc empe_empr_details;
+desc empe_dependant_details;
+desc revenue_live_list_special_case_payment;
+
+
+select em.empr_code,erd.empe_ip_number,erd.empe_name,edd.dependant_name,epd.date_of_birth,erd.FirstDateofApp,paid_date from empr_master em
+inner join empe_empr_details eed on eed.empr_master_fk=em.pk and em.active=1 and eed.active=1
+inner join empe_reg_details erd on erd.pk=eed.empe_reg_details_fk
+inner join empe_dependant_details edd on edd.empe_reg_details_fk=erd.pk and relationship_master_fk =1 and is_dependant =0
+inner join empe_personal_details epd on epd.empe_reg_details_fk=erd.pk and epd.active=1 and edd.active=1
+inner join revenue_live_list_special_case_payment rll on erd.pk=rll.empe_reg_details_fk and erd.active=1
+where erd.branch_office_fk=1238 and  paid_date between '2012-11-02 00:00:00'  and '2022-11-20'
+
+union
+
+select em.sub_code,erd.empe_ip_number,erd.empe_name,edd.dependant_name,epd.date_of_birth,erd.FirstDateofApp,paid_date from empr_subunit_details em
+inner join empe_empr_details eed on eed.empr_subunit_details_fk=em.pk and em.active=1 and eed.active=1
+inner join empe_reg_details erd on erd.pk=eed.empe_reg_details_fk
+inner join empe_dependant_details edd on edd.empe_reg_details_fk=erd.pk and relationship_master_fk =1 and is_dependant =0
+inner join empe_personal_details epd on epd.empe_reg_details_fk=erd.pk and epd.active=1 and edd.active=1
+inner join revenue_live_list_special_case_payment rll on erd.pk=rll.empe_reg_details_fk and erd.active=1
+where erd.branch_office_fk=1238 and  paid_date between '2012-11-02 00:00:00'  and '2022-11-20';
+
+
+
+desc revenue_live_list_special_case_payment;
+desc revenue_mc_payment_det;
+
+
+
+select em.empr_code,efd.fact_estab_name from empr_master em
+inner join empr_factory_details efd on efd.empr_master_fk=em.pk and efd.active=1 and em.active=1
+ where em.region_fk=766;
+
+
+select * from revenue_mc_master limit 100;
+select * from revenue_mc_trans_det limit 100;
+select * from revenue_mc_payment_det where ;
+select * from revenue_mc_ip_contr_det  where empe_reg_details_fk='100933616';
+
+
+query: select td.district,count(erd.pk) from empr_master em
+inner join empe_empr_details eed on eed.empr_master_fk=em.pk and em.active=1 and eed.active=1
+inner join empe_reg_details erd on erd.pk=eed.empe_reg_details_fk and erd.active=1
+inner join empe_address ea on ea.empe_reg_details_fk=erd.pk and erd.active=1
+inner join tbldistrict td on td.pk=ea.district and td.tblstate_pk=ea.state_master_fk and ea.active=1
+where tblstate_pk=11 and type_of_address='Present' and td.active='YES' and td.pk= '575'
+group by td.district
+
+union
+
+
+select td.district,count(erd.pk) from empr_subunit_details em
+inner join empe_empr_details eed on eed.empr_subunit_details_fk=em.pk and em.active=1 and eed.active=1
+inner join empe_reg_details erd on erd.pk=eed.empe_reg_details_fk and erd.active=1
+inner join empe_address ea on ea.empe_reg_details_fk=erd.pk and erd.active=1
+inner join tbldistrict td on td.pk=ea.district and td.tblstate_pk=ea.state_master_fk and ea.active=1
+where tblstate_pk=11 and type_of_address='Present' and td.active='YES' and td.pk= '575'
+group by td.district;
