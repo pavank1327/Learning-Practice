@@ -1,0 +1,35 @@
+IM3237450 ( (Details of IP reg)
+
+use esicinsurance;
+
+select em.empr_code as employercode,efd.fact_estab_name as employername,
+concat(employer_address1,employer_address2,employer_address3) as addressoftheemployer,
+count(distinct a.pk) as aadhaarseedingofIP, count(distinct ad.pk) as Aadhaarseedingoftheirdependants,a.seeded as aadhaarverifiedstatus,
+concat(ea.address1,',',ea.address2,',',ea.address3) as Address,ifnull(ea.mobile,ea.phone_number) phone_number from empr_master em
+inner join empr_factory_details efd on efd.empr_master_fk=em.pk and efd.active=1 and em.active=1
+inner join empr_employer_cont_details ecd on ecd.empr_master_fk=em.pk and ecd.active=1
+inner join empe_empr_details eed on eed.empr_master_fk=em.pk and eed.active=1
+inner join empe_reg_details erd on eed.empe_reg_details_fk=erd.pk and erd.active=1
+inner join empe_reg_ip_aadhaar a on a.empe_reg_details_fk=erd.pk
+inner join empe_reg_ip_aadhaar_dep ad on ad.empe_reg_details_fk=erd.pk 
+inner join empe_address ea on ea.empe_reg_details_fk=erd.pk and ea.active=1
+inner join tbllocation tbl on tbl.pk=em.region_fk and tbl.active='Yes'
+where em.region_fk=506
+group by em.empr_code,efd.fact_estab_name
+
+union  
+
+select em.sub_code as employercode,efd.fact_estab_name as employername,
+concat(employer_address1,employer_address2,employer_address3) as addressoftheemployer,
+count(distinct a.pk) as aadhaarseedingofIP, count(distinct ad.pk) as Aadhaarseedingoftheirdependants,a.seeded as aadhaarverifiedstatus,
+concat(ea.address1,',',ea.address2,',',ea.address3) as Address,ifnull(ea.mobile,ea.phone_number) phone_number from empr_subunit_details em
+inner join empr_factory_details efd on efd.empr_master_fk=em.pk and efd.active=1 and em.active=1
+inner join empr_employer_cont_details ecd on ecd.empr_master_fk=em.pk and ecd.active=1
+inner join empe_empr_details eed on eed.empr_master_fk=em.pk and eed.active=1
+inner join empe_reg_details erd on eed.empe_reg_details_fk=erd.pk and erd.active=1
+inner join empe_reg_ip_aadhaar a on a.empe_reg_details_fk=erd.pk
+inner join empe_reg_ip_aadhaar_dep ad on ad.empe_reg_details_fk=erd.pk 
+inner join empe_address ea on ea.empe_reg_details_fk=erd.pk and ea.active=1
+inner join tbllocation tbl on tbl.pk=em.region_fk and tbl.active='Yes'
+where em.region_fk=506
+group by em.sub_code,efd.fact_estab_name;

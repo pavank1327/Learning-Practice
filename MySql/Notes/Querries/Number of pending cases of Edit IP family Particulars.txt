@@ -1,0 +1,22 @@
+31)Number of pending cases of Edit IP/family Particulars-reg.
+
+select tbl1.location_name 'RO/SRO', tbl.location_name as 'Branchoffice',count(etd.pk) TotalNoofRequestreceived
+from empe_reg_ip_task_details etd
+inner join tbllocation tbl on tbl.pk=etd.branch_fk and tbl.active='Yes'
+inner join tbllocation tbl1 on tbl1.pk=tbl.Reporting_office and tbl1.active='Yes' where etd.active =0 and etd.rejectstatus=1 
+and etd.task_master_fk in (1,4)
+group by tbl1.location_name,tbl.location_name;
+
+select tbl1.location_name 'RO/SRO', tbl.location_name as 'Branchoffice',count(etd.pk) TotalNoofRequestacceptedandpending 
+from empe_reg_ip_task_details etd
+inner join tbllocation tbl on tbl.pk=etd.branch_fk and tbl.active='Yes'
+inner join tbllocation tbl1 on tbl1.pk=tbl.Reporting_office and tbl1.active='Yes' where etd.active in (1,3) and etd.rejectstatus=0 
+and etd.task_master_fk in (1,4)
+group by tbl1.location_name,tbl.location_name; 
+
+select tbl1.location_name 'RO/SRO', tbl.location_name as 'Branchoffice',count(etd.pk) TotalNoofRequestpending 
+from empe_reg_ip_task_details etd
+inner join tbllocation tbl on tbl.pk=etd.branch_fk and tbl.active='Yes'
+inner join tbllocation tbl1 on tbl1.pk=tbl.Reporting_office and tbl1.active='Yes' where eid.active =1 and eid.rejectstatus=0	
+and etd.task_master_fk in (1,4)
+group by tbl1.location_name,tbl.location_name; 

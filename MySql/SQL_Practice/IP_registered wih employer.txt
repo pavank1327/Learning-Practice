@@ -1,0 +1,48 @@
+SELECT
+    em.empr_code as emprcode,
+    efd.fact_estab_name as nameoftheemployer,
+    erd.empe_ip_number as IPnumber,
+    erd.empe_name as IPname,
+    CONCAT(epd.father_name, '', epd.husband_name) as fatherorhusbandname,
+    epd.date_of_birth as Dateofbirth,
+    DATE(eed.created_datetime) as dateofregistration,
+    DATE(eed.appointment_date) as appointmentdate,
+    CONCAT(rm.mc_month, ',', rm.mc_year) as Contributionperiod,
+    rm.mc_type as employercontributionstatus
+FROM
+    empr_master em
+    INNER JOIN empr_factory_details efd ON efd.empr_master_fk = em.pk AND efd.active = 1
+    INNER JOIN empe_empr_details eed ON eed.empr_master_fk = em.pk AND eed.active = 1 AND em.active = 1
+    INNER JOIN empe_reg_details erd ON eed.empe_reg_details_fk = erd.pk AND erd.active = 1
+    INNER JOIN empe_personal_details epd ON epd.empe_reg_details_fk = erd.pk AND epd.active = 1
+    INNER JOIN empe_empr_details_workflow ew ON ew.empe_reg_details_fk = erd.pk AND ew.active = 2
+    INNER JOIN revenue_mc_master rm ON rm.empr_master_fk = em.pk AND rm.mc_year BETWEEN 2014 AND 2022
+    INNER JOIN tbllocation tbl ON tbl.pk = em.region_fk AND tbl.active = 'Yes'
+WHERE
+    em.region_fk = 1117 AND DATE(eed.appointment_date) BETWEEN '2014-01-01' AND '2022-12-31'
+
+UNION ALL
+
+SELECT
+    em.sub_code as emprcode,
+    efd.fact_estab_name as nameoftheemployer,
+    erd.empe_ip_number as IPnumber,
+    erd.empe_name as IPname,
+    CONCAT(epd.father_name, '', epd.husband_name) as fatherorhusbandname,
+    epd.date_of_birth as Dateofbirth,
+    DATE(eed.created_datetime) as dateofregistration,
+    DATE(eed.appointment_date) as appointmentdate,
+    CONCAT(rm.mc_month, ',', rm.mc_year) as Contributionperiod,
+    rm.mc_type as employercontributionstatus
+FROM
+    empr_subunit_details em
+    INNER JOIN empr_factory_details efd ON efd.empr_master_fk = em.pk AND efd.active = 1
+    INNER JOIN empe_empr_details eed ON eed.empr_subunit_details_fk = em.pk AND eed.active = 1 AND em.active = 1
+    INNER JOIN empe_reg_details erd ON eed.empe_reg_details_fk = erd.pk AND erd.active = 1
+    INNER JOIN empe_personal_details epd ON epd.empe_reg_details_fk = erd.pk AND epd.active = 1
+    INNER JOIN empe_empr_details_workflow ew ON ew.empe_reg_details_fk = erd.pk AND ew.active = 2
+    INNER JOIN revenue_mc_master rm ON rm.empr_subunit_details_fk = em.pk AND rm.mc_year BETWEEN 2014 AND 2022
+    INNER JOIN tbllocation tbl ON tbl.pk = em.region_fk AND tbl.active = 'Yes'
+WHERE
+    em.region_fk = 1117 AND DATE(eed.appointment_date) BETWEEN '2014-01-01' AND '2022-12-31';
+ 

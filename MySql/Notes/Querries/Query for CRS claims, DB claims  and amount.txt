@@ -1,0 +1,23 @@
+Query for CRS claims and amount:
+
+select
+MONTH(BCM.CREATED_DATETIME) as Month, count(bcm.pk) as NoofCRSclaims,
+sum(bpd.paid_amount) as TotalamountforCRS from  benefit_claim_master bcm 
+inner join benefit_payment_details bpd on bpd.benefit_claim_master_fk=bcm.pk  and bcm.created_by=9091
+inner join tbllocation tl on tl.pk=bcm.tbllocation_fk
+inner join tbllocation tlo on tlo.pk=tl.Reporting_Office
+where tlo.pk=4 and bcm.is_COVID_Claim=1 and benefit_sub_type_fk=2009 
+and bcm.claim_status in (3,98) AND MONTH(BCM.CREATED_DATETIME) in (4,5,6,7,8,9,10) AND YEAR(BCM.CREATED_DATETIME)=2023
+group by MONTH(BCM.CREATED_DATETIME),YEAR(BCM.CREATED_DATETIME); 
+
+Query for DB claims and amount: 
+
+select #erd.empe_name as 'IPName', erd.empe_ip_number as 'IPNumber',
+MONTH(BCM.CREATED_DATETIME) as Month, count(bcm.pk) as NoofDBclaims,
+sum(bpd.paid_amount) as TotalamountforDB from  benefit_claim_master bcm #empe_reg_Details erd
+inner join benefit_payment_details bpd on bpd.benefit_claim_master_fk=bcm.pk  #and bcm.created_by=9091
+inner join tbllocation tl on tl.pk=bcm.tbllocation_fk
+inner join tbllocation tlo on tlo.pk=tl.Reporting_Office
+where tlo.pk=4 and bcm.is_COVID_Claim=0 and benefit_sub_type_fk=2009 
+and bcm.claim_status in (3,98) AND MONTH(BCM.CREATED_DATETIME) in (4,5,6,7,8,9,10) AND YEAR(BCM.CREATED_DATETIME)=2023
+group by MONTH(BCM.CREATED_DATETIME),YEAR(BCM.CREATED_DATETIME); 

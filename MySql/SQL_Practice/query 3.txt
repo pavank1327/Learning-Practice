@@ -1,0 +1,521 @@
+desc tbluser;
+desc tblemployee;
+
+query less then 21000 salary:
+select  rm.mc_year,gender,count(rmc.empe_reg_details_fk) count
+
+from empr_master em
+
+inner join revenue_mc_master rm on empr_master_fk=em.pk and rm.empr_subunit_details_fk is  null
+
+inner join revenue_mc_ip_contr_det rmc on rmc.mc_master_fk=rm.pk
+
+inner join empe_reg_details erd on rmc.empe_reg_details_fk = erd.pk
+
+inner join  empe_personal_details epd on erd.pk = epd.empe_reg_details_fk
+
+where  rmc.mc_reason_fk = 4 and rmc.mc_type = 0 and rmc.monthly_wages > 21000
+
+and year(rmc.created_datetime) between 2017 and 2021
+
+group by rm.mc_year,gender
+
+union
+
+select  rm.mc_year,gender,count(rmc.empe_reg_details_fk) count
+
+from empr_subunit_details em
+
+inner join revenue_mc_master rm on empr_subunit_details_fk=em.pk  and rm.empr_subunit_details_fk is not null
+
+inner join revenue_mc_ip_contr_det rmc on rmc.mc_master_fk=rm.pk
+
+inner join empe_reg_details erd on rmc.empe_reg_details_fk = erd.pk
+
+inner join  empe_personal_details epd on erd.pk = epd.empe_reg_details_fk
+
+where  rmc.mc_reason_fk = 4 and rmc.mc_type = 0 and rmc.monthly_wages > 21000
+
+and year(rmc.created_datetime) between 2017 and 2021
+
+group by rm.mc_year,gender;
+
+
+
+
+select erd.empe_ip_number,erd.empe_name,bcm.pk as claim_ID,bpd.paid_amount,bpd.pk as bill_number,bcm.created_by,bcm.created_datetime,
+te.Employee_ID_Name,tu.UserID as createdbyuser,
+tu1.UserID as  updatedbyuser,
+te.Full_Name as createdbyempename,te1.Full_Name as updatedbyemepename,te.Emp_Desig,te1.Emp_Desig
+ from empe_reg_details erd
+inner join benefit_claim_master bcm on bcm.empe_reg_details_fk=erd.pk and erd.active=1
+inner join benefit_payment_details bpd on bpd.benefit_claim_master_fk=bcm.pk
+-- inner join tbllocation tbl on tbl.pk=erd.branch_office_fk and tbl.active='yes'
+inner join tbluser tu on tu.tblemployee_pk=bcm.created_by
+inner join tbluser tu1 on tu1.tblemployee_pk=bcm.updated_by
+    inner join tblemployee te on te.pk=tu.tblemployee_pk
+inner join tblemployee te1 on te1.pk=tu1.tblemployee_pk
+
+where bpd.pk in('8727066',
+'9163576',
+'8728238',
+'8199015',
+'8500587',
+'8976904',
+'8618194',
+'9163610',
+'8500592',
+'8833417',
+'8668402',
+'8500601',
+'8976909',
+'8506084',
+'8984949',
+'8352543',
+'8528116',
+'8952407',
+'8726964',
+'8397004',
+'8636357',
+'8528130',
+'8909743',
+'8500548',
+'8847584',
+'8698395',
+'8286352',
+'8696983',
+'8352121',
+'8554953',
+'8981087',
+'9449450',
+'8506172',
+'8820675',
+'8528144',
+'8849636',
+'8618235',
+'8428652',
+'8286659',
+'8698335',
+'8987212',
+'8727023',
+'9229690',
+'8698381',
+'9163611',
+'8500560',
+'8847610',
+'8520392',
+'8984945',
+'8500595',
+'8897972',
+'8520394',
+'8851579',
+'8506107',
+'8847973',
+'8555938',
+'8624445',
+'9162376',
+'8726997',
+'8618212',
+'9074240',
+'8494680',
+'8651463',
+'9144851',
+'8528136',
+'8909751',
+'8500565',
+'8981114',
+'8698410',
+'9207886',
+'8526276',
+'8256872',
+'8624511',
+'8428693',
+'9074355',
+'8462296',
+'8526910',
+'8697151',
+'8476865',
+'8494696',
+'8500155',
+'8952400',
+'9414587',
+'8624500',
+'9074342',
+'8500188',
+'8848484',
+'8651528',
+'9144840',
+'8951894',
+'8618268',
+'9074260',
+'8669126',
+'8987567',
+'8732193',
+'8833426',
+'8461734',
+'8714016',
+'8397033',
+'8618285',
+'8732178',
+'8554928',
+'8897979',
+'8528146',
+'8823975',
+'8728227',
+'8554923',
+'8897989',
+'8462305',
+'8987182',
+'8323320',
+'8732219',
+'9074248',
+'8528134',
+'8833433',
+'8677450',
+'8677522',
+'8714000',
+'9162614',
+'8624467',
+'8618295',
+'9074386',
+'8624479',
+'8520382',
+'8651505',
+'8987593',
+'8526282',
+'8843387',
+'8703231',
+'8500157',
+'8848003',
+'8742978',
+'9162447',
+'8554943',
+'8698349',
+'8713948',
+'8624515',
+'9144602',
+'8726974',
+'8528148',
+'8847980',
+'8698430',
+'8528138',
+'8847875',
+'8528140',
+'8981279',
+'8528127',
+'8847850',
+'8217901',
+'8520389',
+'8852392',
+'8198968',
+'8520405',
+'8976902',
+'8636362',
+'9144872',
+'8201258',
+'8500162',
+'8849631',
+'8728081',
+'9348234',
+'8500174',
+'8852400',
+'8726954',
+'8618307',
+'9144643',
+'8698289',
+'8500182',
+'8897984',
+'8696992',
+'8528132',
+'8843377',
+'8653168',
+'9144696',
+'8677514',
+'9282107',
+'8953487',
+'8996879',
+'10717838',
+'11349280',
+'10676348',
+'10692302',
+'12662879',
+'11960161',
+'10692316',
+'10868405',
+'11993884',
+'10668078',
+'11546382',
+'12151282');
+
+
+
+
+select count(em.empr_code),tbl.location_name 'BranchOffice'
+ from empr_reg_task_details ert
+inner join empr_master em on em.pk=ert.table_ref_key and  em.active=1 and ert.active=1
+inner join  esicinsurance.tbllocation tbl on tbl.pk=em.branch_office_fk
+inner join  esicinsurance.tbllocation tbl1 on tbl1.pk=tbl.reporting_office AND TBL1.ACTIVE = 'YES' and tbl.tbllocationtype_pk in (4)
+where tbl1.pk=11 and tbl.pk in('101','4113','4191','4204','4220') and ert.created_datetime between '2020-01-01 00:00:00' and '2022-10-11 23:59:59'
+group by tbl.location_name;
+
+
+select count(em.empr_code),tbl.location_name 'BranchOffice'
+ from empr_reg_task_details ert
+inner join empr_master em on em.pk=ert.table_ref_key and  em.active=1 and ert.active=0
+inner join  esicinsurance.tbllocation tbl on tbl.pk=em.branch_office_fk
+inner join  esicinsurance.tbllocation tbl1 on tbl1.pk=tbl.reporting_office AND TBL1.ACTIVE = 'YES' and 
+tbl.tbllocationtype_pk in (4)
+where tbl1.pk=11 and tbl.pk in('101','4113','4191','4204','4220') and ert.created_datetime between '2020-01-01 10:00:00' and '2022-10-11 23:59:59'
+group by tbl.location_name;
+
+
+
+select td.district,count(erd.pk) from
+empe_reg_details erd
+inner join empe_address ea on ea.empe_reg_details_fk=erd.pk and erd.active=1
+inner join tbldistrict td on td.pk=ea.district and td.tblstate_pk=ea.state_master_fk and ea.active=1
+where tblstate_pk=30 and type_of_address='Present' and td.active='YES' and td.pk in('411','412','413')
+group by td.district;
+
+
+
+select td.district,count(erd.pk) from empr_master em
+inner join empe_empr_details eed on eed.empr_master_fk=em.pk and em.active=1 and eed.active=1
+inner join empe_reg_details erd on erd.pk=eed.empe_reg_details_fk and erd.active=1
+inner join empe_address ea on ea.empe_reg_details_fk=erd.pk and erd.active=1
+inner join tbldistrict td on td.pk=ea.district and td.tblstate_pk=ea.state_master_fk and ea.active=1
+where tblstate_pk=30 and type_of_address='Present' and td.active='YES' and td.pk in('411','412','413')
+group by td.district
+
+union
+
+
+select td.district,count(erd.pk) from empr_subunit_details em
+inner join empe_empr_details eed on eed.empr_subunit_fk=em.pk and em.active=1 and eed.active=1
+inner join empe_reg_details erd on erd.pk=eed.empe_reg_details_fk and erd.active=1
+inner join empe_address ea on ea.empe_reg_details_fk=erd.pk and erd.active=1
+inner join tbldistrict td on td.pk=ea.district and td.tblstate_pk=ea.state_master_fk and ea.active=1
+where tblstate_pk=30 and type_of_address='Present' and td.active='YES' and td.pk in('411','412','413')
+group by td.district;
+
+
+
+show full processlist;
+kill '4623590';
+desc empe_reg_details;
+select * from benefit_type_master;-- 1001,1003,1004,1007,SB/TDB/DB/PDB/MB/Funeral)
+desc benefit_claim_master;
+select * from benefit_sub_type;
+desc benefit_sub_type;
+
+select * from benefit_payment_details limit 100;-- sb-1001 as 2014,tdb-1001 as 2015,db as 1004 as 2008,2009,pdb-1000 as 2000,2001,2002,2003,
+
+
+select tbl1.location_name 'SRO',count(distinct erd.empe_ip_number) from empe_reg_details erd
+inner join tbllocation tbl on tbl.pk=erd.branch_office_fk and erd.active=1
+inner join tbllocation tbl1 on tbl1.pk=tbl.reporting_office and tbl.active='YES' and   tbl1.active='YES'
+where tbl1.pk='1563';
+desc benefit_payment_details;
+desc empe_reg_details;
+
+
+
+select erd.empe_ip_number,erd.empe_name,bcm.pk,bpd.created_datetime from empe_reg_details erd
+inner join benefit_claim_master bcm on bcm.empe_reg_details_fk=erd.pk and erd.active=1
+inner join benefit_payment_details bpd on bpd.benefit_claim_master_fk=bcm.pk
+where erd.empe_ip_number in('	5013915968	',
+'	5013915968	',
+'	5014904277	',
+'	5014957646	',
+'	5014957646	',
+'	5014957646	',
+'	5014990284	',
+'	5014990284	',
+'	5015756238	',
+'	5015756238	',
+'	5017237772	',
+'	5017238800	',
+'	5017238800	',
+'	5017249560	',
+'	5017249560	',
+'	5017249561	',
+'	5017249561	',
+'	5017249561	',
+'	5017249568	',
+'	5017266958	',
+'	5017266958	',
+'	5018056705	',
+'	5018056705	',
+'	5018068120	',
+'	5018068120	',
+'	5018080317	',
+'	5018083323	',
+'	5018083323	',
+'	5018091647	',
+'	5018091647	',
+'	5018091647	',
+'	5018097719	',
+'	5018116921	',
+'	5018116921	',
+'	5018142324	',
+'	5018142324	',
+'	5018152715	',
+'	5018184250	',
+'	5018184251	',
+'	5018184251	',
+'	5018184251	',
+'	5018184253	',
+'	5018184253	',
+'	5018184258	',
+'	5018184258	',
+'	5018744965	',
+'	5018744965	',
+'	5018754922	',
+'	5018754922	',
+'	5019121270	',
+'	5019121270	',
+'	5019154778	',
+'	5019154778	',
+'	5019178028	',
+'	5019178028	',
+'	5019178286	',
+'	5019279925	',
+'	5019279925	',
+'	5019294732	',
+'	5019558132	',
+'	5019558132	',
+'	5019571652	',
+'	5019593888	',
+'	5019593888	',
+'	5019657767	',
+'	5019657767	',
+'	5019660934	',
+'	5019660934	',
+'	5019714701	',
+'	5019714701	',
+'	5019727736	',
+'	5019729042	',
+'	5019746835	',
+'	5019746835	',
+'	5019800496	',
+'	5019846977	',
+'	5019869200	',
+'	5019869308	',
+'	5019869317	',
+'	5019875828	',
+'	5019880346	',
+'	5019880346	',
+'	5019892895	',
+'	5020247420	',
+'	5020247420	',
+'	5020250838	',
+'	5020250838	',
+'	5020262839	',
+'	5020262839	',
+'	5020272626	',
+'	5020275266	',
+'	5020275266	',
+'	5020281347	',
+'	5020291045	',
+'	5020291045	',
+'	5020307168	',
+'	5020309850	',
+'	5020309850	',
+'	5020321111	',
+'	5020321111	',
+'	5020440234	',
+'	5020442349	',
+'	5020442349	',
+'	5020455300	',
+'	5020455300	',
+'	5020455465	',
+'	5020522591	',
+'	5020522591	',
+'	5020557544	',
+'	5020564356	',
+'	5020566385	',
+'	5020589459	',
+'	5020589459	',
+'	5020598916	',
+'	5020598916	',
+'	5020606398	',
+'	5020606678	',
+'	5020636844	',
+'	5020636889	',
+'	5020637529	',
+'	5020669347	',
+'	5020669347	',
+'	5020675028	',
+'	5020679695	',
+'	5020680141	',
+'	5020680141	',
+'	5020688304	',
+'	5020688304	',
+'	5020693156	',
+'	5020698822	',
+'	5020698822	',
+'	5020701666	',
+'	5020701666	',
+'	5020712859	',
+'	5020712869	',
+'	5020723413	',
+'	5020733721	',
+'	5020733721	',
+'	5020733945	',
+'	5020735176	',
+'	5020735176	',
+'	5020737289	',
+'	5020758038	',
+'	5020758038	',
+'	5020772591	',
+'	5020772591	',
+'	5020944039	',
+'	5020944039	',
+'	5020946148	',
+'	5020946148	',
+'	5020946148	',
+'	5020957151	',
+'	5020957151	',
+'	5020957151',
+'	5020973502',
+'	5020973502',
+'	5020975978',
+'	5020975978',
+'	5020975978',
+'	5020976338',
+'	5020980179',
+'	5021117870',
+'	5021117870',
+'	5021193438',
+'	5021520516',
+'	5021520516',
+'	5021525886',
+'	5021533660',
+'	5021533660',
+'	5021546535',
+'	5021559267',
+'	5021559267',
+'	5021560839',
+'	5021560839',
+'	5021715927',
+'	5030254844',
+'	5030258557',
+'	5030272255',
+'	5039007798',
+'	5039007801',
+'	5039007804',
+'	5039007868',
+'	5039007872',
+'	5039008961',
+'	5039008969',
+'	5039012380',
+'	5039024912',
+'	5039026987',
+'	5039035218',
+'	5039038889') and bpd.created_datetime between '2016-06-06 00:00:00' and '2018-10-03 23:59:59';
+
+
+show full processlist;
+kill '4721542';
+
+
