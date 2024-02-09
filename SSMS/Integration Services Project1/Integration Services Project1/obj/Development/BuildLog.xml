@@ -2,7 +2,7 @@
 <BuildLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ProjectInfo>
     <Name>Integration Services Project1</Name>
-    <LastWriteTime>2023-12-23T15:40:22.9034064Z</LastWriteTime>
+    <LastWriteTime>2023-12-25T06:23:11.2656615Z</LastWriteTime>
     <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
   </ProjectInfo>
   <LastBuildInfos>
@@ -13,7 +13,7 @@
     </ProjectBuildItemInfo>
     <ProjectBuildItemInfo>
       <Name>Both_OLE_DB.dtsx</Name>
-      <LastWriteTime>2023-12-23T15:43:29.4166046Z</LastWriteTime>
+      <LastWriteTime>2024-01-21T14:28:06.6624654Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
   </LastBuildInfos>

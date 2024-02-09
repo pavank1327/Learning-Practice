@@ -1,0 +1,140 @@
+-- Main table
+select * from revenue_Defaulter_list  where empr_code='11000247110000507' and defaulting_year in (2017,2018,2019);
+
+-- Letter table
+select * from revenue_defaulters_initiated_action where letter_name like ('%61610403420021201%');
+select * from revenue_defaulters_initiated_action where order_certificate_id=267154;
+
+-- Interest
+select * from revenue_defaulter_list rdl
+inner join revenue_interest_contribution_det ricd
+on rdl.pk=ricd.revenue_defaulter_list_fk and rdl.status=0
+left join revenue_intdmg_process_det ripd on ripd.pk=ricd.interest_process_fk
+and cd18_type=6 where empr_code='35000332060001008 ';
+
+
+-- Damage
+select * from revenue_defaulter_list rdl
+inner join revenue_damage_contribution_det ricd
+on rdl.pk=ricd.revenue_defaulter_list_fk and rdl.status=0
+left join revenue_intdmg_process_det ripd on ripd.pk=ricd.damage_process_fk
+and cd18_type=7 where empr_code='23350210770011102';
+
+
+desc empr_master;
+show table status like '%factory_details%';
+desc empr_factory_details;
+select * from empr_factory_details where fact_estab_name like '%amazon%';
+select * from empr_master where empr_code='';
+
+
+
+select * from revenue_c18_issued_Det where pk='267152'; -- c18-actual,c18-adhoc
+
+select * from  revenue_special_orders where revenue_cd18_id=251227;  -- 45A,85B
+
+select * from revenue_personal_hearing_det where revenue_cd18_id=31011 ; -- adhoc,D18
+
+select * from revenue_intdmg_process_det where pk in (267154);  -- C18I,D18
+select * from revenue_recovery_det where order_C18_fk=125133;  -- C19,C19I,D19
+select * from  task_Details where table_Ref_key=29390; -- for all notices except D1,D2,D3 a record will insert
+
+-- Monthly contribution
+
+select * from revenue_mc_master where empr_master_fk=2985336;  -- contribution filling for mainunit
+
+select * from revenue_mc_payment_Det where monthly_cont_master_fk=1136232; -- payment due,amount paid
+select * from revenue_challan where empr_master_fk=3253407; -- challan data of mainunit
+select * from revenue_challan where empr_subunit_details_fk=2985336; -- challan data of subunit
+
+select * from revenue_challan where  challan_number='03318101040061';
+select * from  revenue_mc_payment_Details limit 20;
+
+select * from recovery_certificate where employer_code_fk in (3185634,3253407);
+select * from revenue_mc_trans_det where challan_fk='20167689';
+
+select * from revenue_mc_payment_trans_details;
+
+show table status like'revenue_%';
+
+
+-- to check payment-due and amount paid of contribution period for mainunit
+select *  from revenue_mc_master rmm
+inner join revenue_mc_payment_det rmp on rmp.monthly_cont_master_fk=rmm.pk  where  empr_master_fk=3130462 ;
+
+-- to check payment-due and amount paid of contribution period for mainunit
+
+select rmm.mc_year,rmm.mc_month,rmp.payment_due,rmp.amount_paid from revenue_mc_master rmm
+inner join revenue_mc_payment_det rmp on rmp.monthly_cont_master_fk=rmm.pk  where  empr_master_fk=143639 ;
+
+
+-- to check payment-due and amount paid of contribution period for subunit
+
+select rmm.mc_year,rmm.mc_month,rmp.payment_due,rmp.amount_paid from revenue_mc_master rmm
+inner join revenue_mc_payment_det rmp on rmp.monthly_cont_master_fk=rmm.pk  where  empr_subunit_details_fk=143639 ;
+
+ -- Admin queries
+select * from tbluser where userid='';
+select *  from tblemployee where pk=;
+select *  from user_role_map where user_fk='';
+select * from tbllocation where pk='';
+
+
+ -- ERP DB
+
+-- FROM ERP Database   challan realised or not  10.10.15.84  erp, admin  insurance
+
+select * from tbladhoc_receipt_extract where challan_no='01311108340826';  -- database- finance select * from t_challan where challan_no='01311108340826'; -- database - finance_r2
+
+
+
+-- monthly defaulterlist batch process
+call pr_defaultersinsertforalllocations('emprcode',regioncode,null,month,year);
+
+
+call pr_defaultersinsertforalllocations_auto('11331006820010204',null,null,8,2018,'2019-04-30');
+
+
+-- interest & damage batch process procedure
+
+call Pr_C18_D18_InterestCal_test_final('03516110540808','2016-03-01', '2017-11-30');
+
+call Pr_C18_D18_InterestCalforsubunit_final('05112107263967','2011-04-01', '2012-03-31');
+
+
+-- C6-register procedures
+
+call pr_c6register(empr_code,startdate,enddate); -- for viweing aodnotices data call revenue_mc_c6register(empr_code,startdate,enddate); -- for viwing MC data call revenue_mc_c6register_AdvanceContribution(empr_code,startdate,enddate); -- for viwing advance contribution details call revenue_mc_c6register_miscellaneous(empr_code,startdate,enddate); -- for viwing miscellenous data
+
+
+ -- recovery/defaulter challan procedures
+
+-- c18-actual  --
+c18-adhoc
+D18
+C18I
+45A
+85B
+
+-- change status in interest and damage process
+
+select ricd.pk from revenue_defaulter_list rdl inner join revenue_interest_contribution_det ricd on rdl.pk=ricd.revenue_defaulter_list_fk and rdl.status=0 left join revenue_intdmg_process_det ripd on ripd.pk=ricd.interest_process_fk and cd18_type=6 where empr_code='11001200230000999' and defaulting_year=2012 and defaulting_month in (4,5) and rdl.pk in(40044799,40044798);
+
+select * from revenue_interest_contribution_det where pk in (11186098,11186099);
+
+
+
+select ricd.pk from revenue_defaulter_list rdl inner join revenue_damage_contribution_det ricd on rdl.pk=ricd.revenue_defaulter_list_fk and rdl.status=0 left join revenue_intdmg_process_det ripd on ripd.pk=ricd.damage_process_fk and cd18_type=7 where empr_code='11001200230000999' and defaulting_year=2014  and damage_due in(109,180,131,35,16);
+
+select * from revenue_damage_contribution_det where pk in (7326942);
+
+
+
+
+
+
+-- AOD Interest splitting Queries
+
+select * from revenue_interest_contribution_det where  pk in (2661514,2661515);
+
+select ricd.pk from revenue_defaulter_list rdl inner join revenue_interest_contribution_det ricd on rdl.pk=ricd.revenue_defaulter_list_fk and rdl.status=0 left join revenue_intdmg_process_det ripd on ripd.pk=ricd.interest_process_fk and cd18_type=6 where empr_code='35000570800001003  '; );
