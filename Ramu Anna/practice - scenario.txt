@@ -1,4 +1,0 @@
-scenario:
-create package:sales,prod,man,customer--text/excel/csv--->source
-target table
-to run in single package

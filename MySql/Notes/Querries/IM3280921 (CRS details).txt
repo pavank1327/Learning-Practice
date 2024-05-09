@@ -1,8 +1,0 @@
-select #erd.empe_name as 'IPName', erd.empe_ip_number as 'IPNumber',
-count(bcm.pk) as NoofCRSclaims,
-sum(bpd.paid_amount) as TotalamountforCRS from  benefit_claim_master bcm #empe_reg_Details erd
-inner join benefit_payment_details bpd on bpd.benefit_claim_master_fk=bcm.pk  and bcm.created_by=9091
-inner join tbllocation tl on tl.pk=bcm.tbllocation_fk
-inner join tbllocation tlo on tlo.pk=tl.Reporting_Office
-where tlo.pk=4 and bcm.is_COVID_Claim=1 and benefit_sub_type_fk=2009 
-and bcm.claim_status in (3,98) AND MONTH(BCM.CREATED_DATETIME)=4 AND YEAR(BCM.CREATED_DATETIME)=2023; 

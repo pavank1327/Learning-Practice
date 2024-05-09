@@ -1,4 +1,0 @@
-Example file:Customer_11242023
-Reporting_Date
-filename=customer_reportingdate
-fullfilename=Arrivedfolder+filename
