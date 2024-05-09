@@ -1,0 +1,88 @@
+create a sql query procedure to fetch all the family edtails from two diferent tables named family and address details useing main contact number from personal details table
+ChatGPT
+To fetch family details from two different tables, "family" and "address_details," using the main contact number from a "personal_details" table, you can create a SQL stored procedure. In this example, I'll provide a simplified SQL Server stored procedure that accomplishes this task. You may need to adjust the code based on your specific database system.
+
+Assuming you have three tables:
+
+personal_details with columns main_contact_number (the common identifier) and other_personal_columns.
+family with columns main_contact_number (foreign key to personal_details) and family_columns.
+address_details with columns main_contact_number (foreign key to personal_details) and address_columns.
+Here's a sample SQL Server stored procedure:
+
+sql
+Copy code
+CREATE PROCEDURE GetFamilyAndAddressDetails
+    @main_contact_number INT -- Adjust the data type as needed
+AS
+BEGIN
+    SELECT
+        pd.main_contact_number,
+        pd.other_personal_columns,
+        f.family_columns,
+        ad.address_columns
+    FROM personal_details pd
+    LEFT JOIN family f ON pd.main_contact_number = f.main_contact_number
+    LEFT JOIN address_details ad ON pd.main_contact_number = ad.main_contact_number
+    WHERE pd.main_contact_number = @main_contact_number;
+END;
+Explanation:
+
+The stored procedure is named GetFamilyAndAddressDetails and accepts an input parameter, @main_contact_number, to specify the main contact number you want to query for.
+
+In the SELECT statement, the query retrieves data from the "personal_details," "family," and "address_details" tables using LEFT JOIN operations on the common main_contact_number column.
+
+The query filters the results based on the provided @main_contact_number.
+
+You can then execute the stored procedure and pass the main contact number as a parameter to fetch the family and address details associated with it. Please adjust the data types, table and column names, and database system-specific syntax as needed for your environment.
+
+
+
+
+User
+create a sql query trigger to fetch all the family edtails from two diferent tables named family and address details useing main contact number from personal details table when ever the cpntact number is updates
+ChatGPT
+To create a SQL trigger that fetches family and address details from two different tables, "family" and "address_details," using the main contact number from the "personal_details" table whenever the contact number is updated, you can use the following SQL Server trigger as an example. You'll need to modify it according to your database system and table structures:
+
+sql
+Copy code
+-- Create an AFTER UPDATE trigger
+CREATE TRIGGER Trigger_UpdateFamilyAndAddressDetails
+ON personal_details
+AFTER UPDATE
+AS
+BEGIN
+    IF UPDATE(main_contact_number)
+    BEGIN
+        DECLARE @UpdatedMainContactNumber INT;
+
+        -- Get the updated main contact number from the INSERTED pseudo-table
+        SELECT @UpdatedMainContactNumber = main_contact_number
+        FROM INSERTED;
+
+        -- Fetch family and address details for the updated main contact number
+        SELECT
+            pd.main_contact_number,
+            f.family_columns,
+            ad.address_columns
+        FROM personal_details pd
+        LEFT JOIN family f ON pd.main_contact_number = f.main_contact_number
+        LEFT JOIN address_details ad ON pd.main_contact_number = ad.main_contact_number
+        WHERE pd.main_contact_number = @UpdatedMainContactNumber;
+    END;
+END;
+Explanation:
+
+This trigger is defined on the "personal_details" table and is set to fire "AFTER UPDATE." It checks whether the "main_contact_number" column was updated.
+
+Inside the trigger, it uses the INSERTED pseudo-table to retrieve the updated "main_contact_number." The INSERTED table contains the new values after an update operation.
+
+It then performs a query to fetch family and address details for the updated "main_contact_number" from the "family" and "address_details" tables using LEFT JOIN operations, similar to the previous stored procedure.
+
+The trigger will run automatically after an update to the "main_contact_number" column of the "personal_details" table.
+
+Please adapt the data types, table and column names, and database-specific syntax to match your specific database system. Be cautious when using triggers, as they can impact database performance, and you should thoroughly test them in a development or testing environment before deploying them in production.
+
+
+
+
+

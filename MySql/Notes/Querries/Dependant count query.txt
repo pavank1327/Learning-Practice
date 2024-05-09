@@ -1,0 +1,29 @@
+Dependant count of Nehrunagar Dispensary
+
+
+select DISPENSARY_NAME,gender,dep_count from (
+select TBL.LOCATION_NAME DISPENSARY_NAME,count(ed.pk) as dep_count,
+case when (ed.gender=' ' OR ed.gender='' OR ed.gender='MM' OR ed.gender=' M' OR ed.gender='FM' OR ed.gender='F M' OR ed.gender='MA' OR ed.gender='M') then 'M' 
+when (ed.gender='F' OR ed.gender=' F' OR ed.gender='F ' OR ed.gender=' F ' or ed.gender='F') then  'F'
+else 'TG' end gender from esicinsurance.empr_master em
+inner join empe_empr_details eed on em.pk = eed.empr_master_fk and em.active = 1 and eed.active = 1 and empr_subunit_details_fk is null
+inner join empe_reg_details erd on erd.pk = eed.empe_reg_details_fk and erd.active = 1
+inner join empe_dependant_details ed on ed.empe_reg_details_fk=erd.pk and ed.active=1
+inner join tbllocation tbl on erd.approved_dispensary_master_fk = TBL.PK
+WHERE TBL.PK = 2218
+group by case when (ed.gender=' ' OR ed.gender='' OR ed.gender='MM' OR ed.gender=' M' OR ed.gender='FM' OR ed.gender='F M' OR ed.gender='MA' OR ed.gender='M') then 'M' 
+when (ed.gender='F' OR ed.gender=' F' OR ed.gender='F ' OR ed.gender=' F ' or ed.gender='F') then  'F'
+else 'TG' end
+union 
+select TBL.LOCATION_NAME DISPENSARY_NAME,count(ed.pk) as dep_count,
+case when (ed.gender=' ' OR ed.gender='' OR ed.gender='MM' OR ed.gender=' M' OR ed.gender='FM' OR ed.gender='F M' OR ed.gender='MA' OR ed.gender='M') then 'M' 
+when (ed.gender='F' OR ed.gender=' F' OR ed.gender='F ' OR ed.gender=' F ' or ed.gender='F') then  'F'
+else 'TG' end gender from esicinsurance.empr_subunit_details em
+inner join empe_empr_details eed on em.pk = eed.empr_subunit_details_fk and em.active = 1 and eed.active =1 and empr_subunit_details_fk is not null
+inner join empe_reg_details erd on erd.pk = eed.empe_reg_details_fk and erd.active = 1
+inner join empe_dependant_details ed on ed.empe_reg_details_fk=erd.pk and ed.active=1
+inner join tbllocation tbl on erd.approved_dispensary_master_fk = TBL.PK
+WHERE TBL.PK = 2218
+group by case when (ed.gender=' ' OR ed.gender='' OR ed.gender='MM' OR ed.gender=' M' OR ed.gender='FM' OR ed.gender='F M' OR ed.gender='MA' OR ed.gender='M') then 'M' 
+when (ed.gender='F' OR ed.gender=' F' OR ed.gender='F ' OR ed.gender=' F ' or ed.gender='F') then  'F'
+else 'TG' end )t  group by gender;
