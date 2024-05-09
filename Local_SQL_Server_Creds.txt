@@ -1,0 +1,3 @@
+Server- PAVAN_K\SQLEXPRESS
+DB - PavanK
+USerName- Pavan_K\Pavan

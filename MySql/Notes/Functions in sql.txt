@@ -1,0 +1,19 @@
+Functions in sql:
+
+
+LOG10() Function in SQL Server
+
+REVERSE() Function in SQL Server
+
+type convertion
+
+
+Val() and Sum() Function in MS Access
+
+LAST_VALUE() function
+
+FIRST_VALUE() function
+
+DIFFERENCE() Function in SQL Server
+
+FLOOR() and CEILING() Function in SQL Server
