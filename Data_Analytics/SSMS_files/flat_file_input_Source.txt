@@ -1,6 +1,0 @@
-[EmpNo],[Ename],[Esalary],[EDeptID],[Country]
-123,pavan,23000,1933,India 
-1234,pavank,23001,1934,India
-12345,pavankch,33002,1935,India
-123456,chpavan,3333,1234,India  
-1234567,chpavank,33334,12344,India  
