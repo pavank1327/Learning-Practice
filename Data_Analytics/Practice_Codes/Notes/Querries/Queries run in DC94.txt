@@ -1,0 +1,72 @@
+Queries run in DC94
+
+(1) MB claim count of RO Indore and accident details of particular employee code
+use esicinsurance;
+select count(bcm.pk) as Count
+from mb_request_details mrd
+inner join benefit_claim_master bcm on bcm.empe_reg_details_fk =mrd.empe_reg_details_fk
+inner join benefit_payment_details bpd on bpd.benefit_claim_master_fk=bcm.pk
+inner join tbllocation tbl on tbl.pk=bcm.tbllocation_fk
+inner join empe_reg_details erd on erd.pk=mrd.empe_reg_details_fk and erd.active=1
+inner join tbllocation tblo on tblo.pk=tbl.Reporting_Office and tblo.pk=627
+where benefit_sub_type_fk=2005 and date(bcm.created_datetime) >='2023-01-01' and '2023-12-24';
+
+
+-- select em.empr_code as employercode,erd.empe_ip_number as IPnumber, erd.empe_name as IPname,concat(a.accident_date,',',a.accident_hour) as Dateofaccident,
+date(appointment_date) as dateofappointment,date(em.created_datetime) as dateofregistration from empr_master em
+inner join empe_empr_details eed on eed.empr_master_fk=em.pk and eed.active=1 and em.active=1
+inner join empe_reg_details erd on eed.empe_reg_details_fk=erd.pk and erd.active=1 
+inner join benefit_accident_report a on a.empe_reg_details_fk=erd.pk 
+where em.active=1 and em.empr_code=63001028730000606
+group by em.empr_code,erd.empe_ip_number;
+
+(2) IP count of Particular IMP's
+
+select count(1) IPCount,eim.imp_name IMPName,imp_code
+from empe_imp_master eim
+inner join empe_reg_details erd on erd.empe_imp_master_fk = eim.pk  and erd.active = 1
+where eim.pk in (2189,3120,3121,3118,2371,2638,2185,2636,3122,3124,3139,
+2188,3125,2664,2687,2196,3123,3126,2187,3127,3129,3110,2922,2686,3138,2950,
+2685,2971,2880,2191,3130,2562,2876,2882,2878,2197,3135,3131,2948,3132,2201,
+3152,3149,3173,3603,3604,3605,3606,3611) and date(erd.created_datetime) between '2023-03-01' and '2023-03-31'
+group by imp_code;
+
+(3) Employers details who have registered before 10 days to the appointment date
+
+select em.empr_code as emprcode,efd.fact_estab_name as nameoftheemployer,
+erd.empe_ip_number as IPnumber,erd.empe_name as IPname,concat(epd.father_name,'',epd.husband_name) as fatherorhusbandname, 
+date(epd.date_of_birth) as Dateofbirth, date(eed.created_datetime) as dateofregistration, date(eed.appointment_date) as appointmentdate,
+concat(rm.mc_month,',',rm.mc_year) as  Contributionperiod,rm.mc_type as employercontributionstatus
+from empr_master em
+inner join empr_factory_details efd on efd.empr_master_fk=em.pk and efd.active=1
+inner join empe_empr_details eed on eed.empr_master_fk=em.pk and eed.active=1 and em.active=1
+inner join empe_reg_details erd on eed.empe_reg_details_fk=erd.pk and erd.active=1
+inner join empe_personal_details epd on epd.empe_reg_details_fk=erd.pk and epd.active=1
+inner join empe_empr_details_workflow ew on ew.empe_reg_details_fk=erd.pk #and ew.active=2
+inner join revenue_mc_master rm on rm.empr_master_fk=em.pk
+inner join tbllocation tbl on tbl.pk =em.region_fk and tbl.active='Yes'
+where em.region_fk=1117 
+and  DATEDIFF(eed.created_datetime, eed.appointment_date) > 10
+
+union 
+
+select em.sub_code as emprcode,efd.fact_estab_name as nameoftheemployer,
+erd.empe_ip_number as IPnumber,erd.empe_name as IPname,concat(epd.father_name,'',epd.husband_name) as fatherorhusbandname, 
+date(epd.date_of_birth) as Dateofbirth, date(eed.created_datetime) as dateofregistration, date(eed.appointment_date) as appointmentdate,
+concat(rm.mc_month,',',rm.mc_year) as  Contributionperiod,rm.mc_type as employercontributionstatus
+from empr_subunit_details em
+inner join empr_factory_details efd on efd.empr_master_fk=em.pk and efd.active=1
+inner join empe_empr_details eed on eed.empr_subunit_details_fk=em.pk and eed.active=1 and em.active=1
+inner join empe_reg_details erd on eed.empe_reg_details_fk=erd.pk and erd.active=1
+inner join empe_personal_details epd on epd.empe_reg_details_fk=erd.pk and epd.active=1
+inner join empe_empr_details_workflow ew on ew.empe_reg_details_fk=erd.pk #and ew.active=2
+inner join revenue_mc_master rm on rm.empr_subunit_details_fk=em.pk 
+inner join tbllocation tbl on tbl.pk =em.region_fk and tbl.active='Yes'
+where em.region_fk=1117 
+and  DATEDIFF(eed.created_datetime, eed.appointment_date) > 10;
+
+
+
+
+
+

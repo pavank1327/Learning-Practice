@@ -1,0 +1,12 @@
+Server- PAVAN_K\SQLEXPRESS
+DB - PavanK
+USerName- Pavan_K\Pavan
+
+
+host: localhost
+service name: XEPDB1
+PW: Oracledb@01
+
+Local schema created:
+name: C##PAVAN
+pw: pavan
