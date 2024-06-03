@@ -1,0 +1,36 @@
+<<<<<<< HEAD
+=======
+Sql query trigger:
+
+>>>>>>> practice
+create a sql query trigger to fetch all the family edtails from two diferent tables named family and address details useing main contact number from personal details table when ever the cpntact number is updates
+ChatGPT
+To create a SQL trigger that fetches family and address details from two different tables, "family" and "address_details," using the main contact number from the "personal_details" table whenever the contact number is updated, you can use the following SQL Server trigger as an example. You'll need to modify it according to your database system and table structures:
+
+
+-- Create an AFTER UPDATE trigger
+
+CREATE TRIGGER Trigger_UpdateFamilyAndAddressDetails
+ON personal_details
+AFTER UPDATE
+AS
+BEGIN
+    IF UPDATE(main_contact_number)
+    BEGIN
+        DECLARE @UpdatedMainContactNumber INT;
+
+        -- Get the updated main contact number from the INSERTED pseudo-table
+        SELECT @UpdatedMainContactNumber = main_contact_number
+        FROM INSERTED;
+
+        -- Fetch family and address details for the updated main contact number
+        SELECT
+            pd.main_contact_number,
+            f.family_columns,
+            ad.address_columns
+        FROM personal_details pd
+        LEFT JOIN family f ON pd.main_contact_number = f.main_contact_number
+        LEFT JOIN address_details ad ON pd.main_contact_number = ad.main_contact_number
+        WHERE pd.main_contact_number = @UpdatedMainContactNumber;
+    END;
+END;

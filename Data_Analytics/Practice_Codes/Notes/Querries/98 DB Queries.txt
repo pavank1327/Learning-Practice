@@ -1,0 +1,382 @@
+(1) IP Count of particular IMP's
+
+use esicinsurance;
+
+select count(erd.pk) as IPcount, eim.imp_name IMPName,imp_code,
+concat(year(erd.created_datetime),'-',month(erd.created_datetime)) 'year_month'
+from empe_imp_master eim
+inner join empe_reg_details erd on erd.empe_imp_master_fk = eim.pk  and erd.active = 1 
+where eim.pk in (2189,3120,3121,3118,2371,2638,2185,2188
+,2664,2687,2196,2187,3127,2922,2880,2191,3130,2562,2876,2878,2197,3131,3132,2201,3152
+,3173,3602,3603,3604,3124,3135)
+ and date(erd.created_datetime) between '2022-06-01' and '2023-07-31'
+group by eim.imp_code,concat(year(erd.created_datetime),'-',month(erd.created_datetime));
+
+(2)
+
+select  count(em.pk) as emprcount #,date(rcid.c18_issued_date) as Dateofissue 
+from empr_master em
+inner join revenue_defaulter_list rdl on rdl.empr_master_fk=em.pk
+inner join empr_factory_details efd on efd.empr_master_fk=em.pk and efd.active=1
+inner join revenue_c18_issued_Det rcid  on rcid.pk=rdl.revenue_c18_det_fk
+inner join location_codes_report lcr on lcr.pk=rdl.region_fk  and lcr.pk=627
+and rcid.revenue_status_master_fk=4 
+where em.active=1 and date(rcid.c18_issued_date) between '2023-07-01' and '2023-07-31'
+group by rcid.pk
+
+union
+
+select  count(em.pk) as emprcount #,date(rcid.c18_issued_date) as Dateofissue 
+from empr_subunit_details em
+inner join revenue_defaulter_list rdl on rdl.empr_subunit_details_fk=em.pk
+inner join empr_factory_details efd on efd.empr_master_fk=em.pk and efd.active=1
+inner join revenue_c18_issued_Det rcid  on rcid.pk=rdl.revenue_c18_det_fk
+inner join location_codes_report lcr on lcr.pk=rdl.region_fk  and lcr.pk=627
+and rcid.revenue_status_master_fk=4
+where em.active=1 and date(rcid.c18_issued_date) between '2023-07-01' and '2023-07-31'
+group by rcid.pk;
+
+(3)
+
+use esicinsurance;
+select tbl1.Location_Name as Region,erd.empe_ip_number as IPNumber,erd.empe_name as IPname,ed.dependant_name as Dependantname,
+date(epd.date_of_birth) as DOB,tbl.location_name as BranchOffice,date(a.Created_Datetime) as aadhaarseededdateforIP ,
+date(eid.Created_Datetime) as aadhaarseededdatefordependant , 
+case 
+when (epd.gender=' ' OR epd.gender='' OR epd.gender='MM' OR epd.gender=' M' OR epd.gender='FM' OR epd.gender='F M' OR epd.gender='MA' OR epd.gender='M') 
+then 'M' when (epd.gender='F' OR epd.gender=' F' OR epd.gender='F ' OR epd.gender=' F ' or epd.gender='F') then  'F'
+end gender
+from empe_reg_details erd
+inner join empe_dependant_details ed on ed.empe_reg_details_fk=erd.pk and ed.active=1
+inner join empe_personal_details epd on epd.empe_reg_details_fk=erd.pk and epd.active=1
+inner join  empe_reg_ip_aadhaar a on erd.empe_ip_number = a.IP_NUmber
+inner join empe_reg_ip_aadhaar_dep eid on eid.empe_reg_details_fk=erd.pk
+inner join tbllocation tbl on erd.branch_office_fk = tbl.pk and tbl.active='Yes'
+inner join  tbllocation tbl1 on tbl.Reporting_Office = tbl1.pk and tbl1.active='Yes'
+where erd.active=1 and tbl1.pk = 784 and date(a.created_datetime) between '2023-01-01' and '2023-09-13';
+#group by tbl1.Location_Name,erd.empe_ip_number,erd.empe_name,ed.dependant_name,
+case when (epd.gender=' ' OR epd.gender='' OR epd.gender='MM' OR epd.gender=' M' OR epd.gender='FM' OR epd.gender='F M' OR epd.gender='MA'OR epd.gender='M') 
+then 'M' when (epd.gender='F' OR epd.gender=' F' OR epd.gender='F ' OR epd.gender=' F ' or epd.gender='F') then  'F'
+end;
+
+(4)
+
+select  count(em.pk) as emprcount
+from empr_master em
+inner join revenue_defaulter_list rdl on rdl.empr_master_fk=em.pk
+inner join empr_factory_details efd on efd.empr_master_fk=em.pk and efd.active=1
+inner join revenue_c18_issued_Det rcid  on rcid.pk=rdl.revenue_c18_det_fk
+inner join  revenue_special_orders rso on rcid.pk=rso.revenue_cd18_id 
+inner join location_codes_report lcr on lcr.pk=rdl.region_fk  and lcr.pk=627
+and rcid.revenue_status_master_fk=4 
+where em.active=1 and date(rso.order_issued_date) between '2023-08-01' and '2023-08-31'
+
+union
+
+select  count(em.pk) as emprcount
+from empr_subunit_details em
+inner join revenue_defaulter_list rdl on rdl.empr_subunit_details_fk=em.pk
+inner join empr_factory_details efd on efd.empr_master_fk=em.pk and efd.active=1
+inner join revenue_c18_issued_Det rcid  on rcid.pk=rdl.revenue_c18_det_fk
+inner join  revenue_special_orders rso on rcid.pk=rso.revenue_cd18_id 
+inner join location_codes_report lcr on lcr.pk=rdl.region_fk  and lcr.pk=627
+and rcid.revenue_status_master_fk=4 
+where em.active=1 and date(rso.order_issued_date) between '2023-08-01' and '2023-08-31';
+
+(5)
+ 
+use esicinsurance;
+select tbl1.Location_Name as Region,erd.empe_ip_number as IPNumber,erd.empe_name as IPname,ed.dependant_name as Dependantname,
+date(epd.date_of_birth) as DOB,tbl.location_name as BranchOffice,date(a.Created_Datetime) as aadhaarseededdateforIP ,
+date(eid.Created_Datetime) as aadhaarseededdatefordependant , 
+case 
+when (epd.gender=' ' OR epd.gender='' OR epd.gender='MM' OR epd.gender=' M' OR epd.gender='FM' OR epd.gender='F M' OR epd.gender='MA' OR epd.gender='M') 
+then 'M' when (epd.gender='F' OR epd.gender=' F' OR epd.gender='F ' OR epd.gender=' F ' or epd.gender='F') then  'F'
+end gender
+from empe_reg_details erd
+inner join  empe_reg_ip_aadhaar a on erd.empe_ip_number = a.IP_NUmber
+inner join empe_reg_ip_aadhaar_dep eid on eid.empe_reg_details_fk=erd.pk
+inner join empe_dependant_details ed on ed.empe_reg_details_fk=erd.pk and ed.active=1
+inner join empe_personal_details epd on epd.empe_reg_details_fk=erd.pk and epd.active=1
+inner join tbllocation tbl on erd.branch_office_fk = tbl.pk and tbl.active='Yes'
+inner join  tbllocation tbl1 on tbl.Reporting_Office = tbl1.pk and tbl1.active='Yes'
+where erd.active=1 and tbl1.pk = 784 
+group by tbl1.Location_Name,erd.empe_ip_number,erd.empe_name,ed.dependant_name,
+case when (epd.gender=' ' OR epd.gender='' OR epd.gender='MM' OR epd.gender=' M' OR epd.gender='FM' OR epd.gender='F M' OR epd.gender='MA'OR epd.gender='M') 
+then 'M' when (epd.gender='F' OR epd.gender=' F' OR epd.gender='F ' OR epd.gender=' F ' or epd.gender='F') then  'F'
+end;
+
+6
+
+select count(erd.pk) as IPCount,eim.imp_name IMPName,eim.imp_code as IMPcode
+#,year(erd.created_datetime) YEAR ,month(erd.created_datetime) Month
+#concat(year(erd.created_datetime),'-',month(erd.created_datetime)) 'year_month'
+from empe_imp_master eim
+inner join empe_reg_details erd on erd.empe_imp_master_fk = eim.pk  and eim.type=1
+inner join revenue_live_list rll on rll.empe_reg_details_fk=erd.pk 
+inner join tbllocation tbl on tbl.pk=erd.branch_office_fk and tbl.active='yes'
+inner join tbllocation tbl1 on tbl1.pk=tbl.Reporting_Office and tbl1.active='yes'
+where erd.active = 1 and tbl1.pk=778
+group by eim.imp_name;
+
+7
+
+use esicinsurance;
+select tt.Region State,tt.Location_Name 'Location Name',efd.fact_estab_name as emprname,em.empr_code as emprcode,
+count(distinct a.pk) abha from empe_reg_ip_abha a
+inner join  empe_reg_details erd on erd.empe_ip_number = a.IP_NUmber and a.Relationship <> 'Self'
+inner join empe_empr_details eed on eed.empe_reg_details_fk = erd.pk
+inner join empr_master em on eed.empr_master_fk = em.pk
+ inner join empr_factory_details efd on efd.empr_master_fk=em.pk
+inner join tbllocation t on erd.branch_office_fk = t.pk 
+inner join  tbllocation tt on t.Reporting_Office = tt.pk
+where tt.pk = 787 and date(erd.created_datetime) between '2023-08-01' and '2023-08-31'
+group by tt.Region,tt.Location_Name,empr_code
+union
+select tt.Region State,tt.Location_Name 'Location Name',efd.fact_estab_name as emprname,em.sub_code as subcode,
+count(distinct a.pk) abha from empe_reg_ip_abha a
+inner join  empe_reg_details erd on erd.empe_ip_number = a.IP_NUmber  and a.Relationship <> 'Self'
+inner join empe_empr_details eed on eed.empe_reg_details_fk = erd.pk
+inner join empr_subunit_details em on eed.empr_subunit_details_fk = em.pk
+ inner join empr_factory_details efd on efd.empr_master_fk=em.empr_master_fk
+inner join tbllocation t on erd.branch_office_fk = t.pk 
+inner join  tbllocation tt on t.Reporting_Office = tt.pk
+where tt.pk = 787 and date(erd.created_datetime) between '2023-08-01' and '2023-08-31'
+group by tt.Region,tt.Location_Name,sub_code;
+
+8
+
+use esicinsurance;
+select tt.Region State,tt.Location_Name 'Location Name',efd.fact_estab_name as emprname,em.empr_code as emprcode,
+count(distinct a.pk) aadhaar from empe_reg_ip_aadhaar_dep a
+inner join  empe_reg_details erd on erd.empe_ip_number = a.IP_NUmber
+inner join empe_empr_details eed on eed.empe_reg_details_fk = erd.pk
+inner join empr_master em on eed.empr_master_fk = em.pk
+ inner join empr_factory_details efd on efd.empr_master_fk=em.pk
+inner join tbllocation t on erd.branch_office_fk = t.pk 
+inner join  tbllocation tt on t.Reporting_Office = tt.pk
+where tt.pk = 787 and date(erd.created_datetime) between '2023-08-01' and '2023-08-31'
+group by tt.Region,tt.Location_Name,empr_code
+union
+select tt.Region State,tt.Location_Name 'Location Name',efd.fact_estab_name as emprname,em.sub_code as subcode,
+count(distinct a.pk) aadhaar from empe_reg_ip_aadhaar_dep a
+inner join  empe_reg_details erd on erd.empe_ip_number = a.IP_NUmber
+inner join empe_empr_details eed on eed.empe_reg_details_fk = erd.pk
+inner join empr_subunit_details em on eed.empr_subunit_details_fk = em.pk
+ inner join empr_factory_details efd on efd.empr_master_fk=em.empr_master_fk
+inner join tbllocation t on erd.branch_office_fk = t.pk 
+inner join  tbllocation tt on t.Reporting_Office = tt.pk
+where tt.pk = 787 and date(erd.created_datetime) between '2023-08-01' and '2023-08-31'
+group by tt.Region,tt.Location_Name,sub_code;
+
+9
+
+use esicinsurance;
+select em.empr_code as employercode,efd.fact_estab_name as Nameoftheemployer,tl.location_name as Branchoffice,
+tbl.location_name as Inspectiondivision,concat(ecd.employer_address1,ecd.employer_address2,ecd.employer_address3) as address,
+rsm.description as registrationstatus,ecd.email as Email,
+ifnull(ecd.mobile,ecd.phone_number) as Mobile,td.District as District,
+concat(rdl.defaulting_year,',',rdl.defaulting_month) as periodofnoncompliance,
+esd.stkh_name as Nameoftheprincipalemployer,esd.stkh_present_address as Residentialaddress from empr_master em
+inner join empr_factory_details efd on efd.empr_master_fk=em.pk and efd.active=1 and em.active=1
+inner join empr_employer_cont_details ecd on ecd.empr_master_fk=em.pk and ecd.active=1
+inner join registration_status_master rsm on rsm.pk=em.registration_status_fk 
+inner join  tbldistrict td on ecd.district_fk=td.pk and td.active='Yes'
+inner join revenue_defaulter_list rdl on rdl.empr_master_fk=em.pk and rdl.status in (1,2)
+inner join empr_stkh_details esd on esd.empr_master_fk=em.pk and esd.active=1
+inner join tbllocation tl on tl.pk=em.branch_office_fk and tl.active='Yes'
+inner join tbllocation tbl on tbl.pk=em.inspection_division_fk and tbl.active='Yes'
+inner join tbllocation tbl1 on tbl1.pk=tbl.reporting_office and tbl1.active='Yes'
+#inner join revenue_challan rc on rc.empr_master_fk=em.pk and rc.challan_status = 5 
+#inner join revenue_mc_master rm on rm.empr_master_fk=em.pk and rm.pk=(select max(r.pk) from revenue_mc_master r
+#where r.empr_master_fk=em.pk) 
+#inner join revenue_mc_ip_contr_det ip on ip.mc_master_fk=rm.pk and ip.mc_type=0
+#inner join revenue_mc_payment_det pd on pd.monthly_cont_master_fk=rm.pk and payment_status=0
+where tbl1.pk=715 and date(em.created_datetime) between '2012-01-01' and '2023-10-16'
+group by em.empr_code,efd.fact_estab_name,tl.location_name,tbl.location_name;
+
+-- union 
+select em.sub_code as employercode,efd.fact_estab_name as Nameoftheemployer,tl.location_name as Branchoffice,
+tbl.location_name as Inspectiondivision,concat(ecd.employer_address1,ecd.employer_address2,ecd.employer_address3) as address,
+rsm.description as registrationstatus,ecd.email as Email,
+ifnull(ecd.mobile,ecd.phone_number) as Mobile,td.District as District,
+concat(rdl.defaulting_year,',',rdl.defaulting_month) as periodofnoncompliance,
+esd.stkh_name as Nameoftheprincipalemployer,esd.stkh_present_address as Residentialaddress from empr_subunit_details em
+inner join empr_factory_details efd on efd.empr_master_fk=em.pk and efd.active=1 and em.active=1
+inner join empr_employer_cont_details ecd on ecd.empr_master_fk=em.pk and ecd.active=1
+inner join registration_status_master rsm on rsm.pk=em.reg_status_fk 
+inner join  tbldistrict td on ecd.district_fk=td.pk and td.active='Yes'
+inner join revenue_defaulter_list rdl on rdl.empr_subunit_details_fk=em.pk and rdl.status in (1,2)
+inner join empr_stkh_details esd on esd.empr_master_fk=em.pk and esd.active=1
+inner join tbllocation tl on tl.pk=em.branch_office_fk and tl.active='Yes'
+inner join tbllocation tbl on tbl.pk=em.inspection_division_fk and tbl.active='Yes'
+inner join tbllocation tbl1 on tbl1.pk=tbl.reporting_office and tbl1.active='Yes'
+#inner join revenue_challan rc on rc.empr_subunit_details_fk=em.pk and rc.challan_status in (0,5) 
+#left join revenue_mc_master rm on rm.empr_subunit_details_fk=em.pk and rm.pk=(select max(r.pk) from revenue_mc_master r
+#where r.empr_subunit_details_fk=em.pk) and date(em.created_datetime) between '2012-01-01' and '2023-10-16'
+#left join revenue_mc_ip_contr_det ip on ip.mc_master_fk=rm.pk and ip.mc_type=0
+#left join revenue_mc_payment_det pd on pd.monthly_cont_master_fk=rm.pk and payment_status=0
+where tbl1.pk=715 and date(em.created_datetime) between '2012-01-01' and '2023-10-16'
+group by em.sub_code,efd.fact_estab_name,tl.location_name,tbl.location_name;
+
+10
+
+use esicinsurance;
+select em.empr_code as employercode,efd.fact_estab_name as Nameoftheemployer,tl.location_name as Branchoffice,
+tbl.location_name as Inspectiondivision,concat(ecd.employer_address1,ecd.employer_address2,ecd.employer_address3) as address,
+rsm.description as registrationstatus,ecd.email as Email,
+ifnull(ecd.mobile,ecd.phone_number) as Mobile,td.District as District,
+concat(rdl.defaulting_year,',',rdl.defaulting_month) as periodofnoncompliance,
+esd.stkh_name as Nameoftheprincipalemployer,esd.stkh_present_address as Residentialaddress from empr_master em
+inner join empr_factory_details efd on efd.empr_master_fk=em.pk and efd.active=1 and em.active=1
+inner join empr_employer_cont_details ecd on ecd.empr_master_fk=em.pk and ecd.active=1
+inner join registration_status_master rsm on rsm.pk=em.registration_status_fk 
+inner join  tbldistrict td on ecd.district_fk=td.pk and td.active='Yes'
+inner join revenue_defaulter_list rdl on rdl.empr_master_fk=em.pk and rdl.status=2
+inner join empr_stkh_details esd on esd.empr_master_fk=em.pk and esd.active=1
+inner join tbllocation tl on tl.pk=em.branch_office_fk and tl.active='Yes'
+inner join tbllocation tbl on tbl.pk=em.inspection_division_fk and tbl.active='Yes'
+inner join tbllocation tbl1 on tbl1.pk=tbl.reporting_office and tbl1.active='Yes'
+where tbl1.pk=715
+group by em.empr_code,efd.fact_estab_name,concat(rdl.defaulting_year,',',rdl.defaulting_month)
+
+union 
+
+select em.sub_code as employercode,efd.fact_estab_name as Nameoftheemployer,tl.location_name as Branchoffice,
+tbl.location_name as Inspectiondivision,concat(ecd.employer_address1,ecd.employer_address2,ecd.employer_address3) as address,
+rsm.description as registrationstatus,ecd.email as Email,
+ifnull(ecd.mobile,ecd.phone_number) as Mobile,td.District as District,
+concat(rdl.defaulting_year,',',rdl.defaulting_month) as periodofnoncompliance,
+esd.stkh_name as Nameoftheprincipalemployer,esd.stkh_present_address as Residentialaddress from empr_subunit_details em
+inner join empr_factory_details efd on efd.empr_master_fk=em.pk and efd.active=1 and em.active=1
+inner join empr_employer_cont_details ecd on ecd.empr_master_fk=em.pk and ecd.active=1
+inner join registration_status_master rsm on rsm.pk=em.reg_status_fk 
+inner join  tbldistrict td on ecd.district_fk=td.pk and td.active='Yes'
+inner join revenue_defaulter_list rdl on rdl.empr_subunit_details_fk=em.pk and rdl.status=2
+inner join empr_stkh_details esd on esd.empr_master_fk=em.pk and esd.active=1
+inner join tbllocation tl on tl.pk=em.branch_office_fk and tl.active='Yes'
+inner join tbllocation tbl on tbl.pk=em.inspection_division_fk and tbl.active='Yes'
+inner join tbllocation tbl1 on tbl1.pk=tbl.reporting_office and tbl1.active='Yes'
+where tbl1.pk=715 
+group by em.sub_code,efd.fact_estab_name,concat(rdl.defaulting_year,',',rdl.defaulting_month);
+
+
+
+#select count(erd.pk) as IPcount from empr_master em
+#inner join empe_empr_details eed on eed.empr_master_fk=em.pk and eed.active=1 and em.active=1
+#inner join empe_reg_details erd on eed.empe_reg_details_fk = erd.pk and erd.active=1
+#where em.region_fk=1147 and  em.empr_code = 60001817130000999 and date(em.created_datetime) between '2016-01-01' and '2023-09-30'
+#group by em.empr_code;
+
+11
+
+use esicinsurance;
+
+select count(1) as IPCount,eim.imp_name IMPName,imp_code
+from empe_imp_master eim
+inner join empe_reg_details erd on erd.empe_imp_master_fk = eim.pk  and erd.active = 1
+where eim.pk=3703 and date(eim.created_datetime) <= '2023-10-17' 
+ group by imp_code;
+
+12
+
+use esicinsurance;
+select tl.location_name as 'Branchoffice',count(erd.pk) as IPCount,
+case when (gender=' ' OR gender='' OR gender='MM' OR gender=' M' OR gender='FM' OR gender='F M' OR gender='MA' OR gender='M') then 'M' 
+when (gender='F' OR gender=' F' OR gender='F ' OR gender=' F ' or gender='F') then  'F'
+else 'TG' end gender from empe_reg_details erd
+inner join empe_personal_details epd on epd.empe_reg_details_fk=erd.pk and epd.active=1 
+inner join tbllocation tl on tl.pk=erd.branch_office_fk and tl.active='Yes'
+where tl.pk in (876,880,881,883,886,888,897) and date(erd.created_datetime) between '2023-09-01' and '2023-09-30'
+group by tl.location_name,
+case when (gender=' ' OR gender='' OR gender='MM' OR gender=' M' OR gender='FM' OR gender='F M' OR gender='MA' OR gender='M') then 'M' 
+when (gender='F' OR gender=' F' OR gender='F ' OR gender=' F ' or gender='F') then  'F'
+else 'TG' end;	
+
+13
+
+use esicinsurance;
+select em.empr_code as emprcode,
+erd.empe_ip_number as IPNumber,erd.empe_name as IPName,ifnull(ea.mobile,ea.phone_number) phone_number
+from empe_reg_details erd              
+inner join empe_empr_details eed on eed.empe_reg_details_fk = erd.pk and eed.active=1 and erd.active=1
+inner join empr_master em on eed.empr_master_fk = em.pk and em.active=1
+inner join empe_address ea on erd.pk=ea.empe_reg_details_fk and ea.active=1 and ea.type_of_address='Present'
+where  em.empr_code in
+(55000215920001007,55000422380001001,55000422950001305,55000429080000606,55000451910001002,
+55000457880001001,55000458410000699,55000463940001001,55000471510001001,55000469270001101,55000477550000099)  
+and erd.pk not in (select (empe_reg_details_fk) from empe_reg_ip_aadhaar e )
+group by em.empr_code,erd.empe_ip_number,erd.empe_name;
+
+14
+
+use esicinsurance;
+select tbl1.Location_Name as Region,erd.empe_ip_number as IPNumber,erd.empe_name as IPname,ed.dependant_name as Dependantname,
+date(epd.date_of_birth) as DOB,tbl.location_name as BranchOffice,date(a.Created_Datetime) as aadhaarseededdateforIP ,
+date(eid.Created_Datetime) as aadhaarseededdatefordependant , 
+case 
+when (epd.gender=' ' OR epd.gender='' OR epd.gender='MM' OR epd.gender=' M' OR epd.gender='FM' OR epd.gender='F M' OR epd.gender='MA' OR epd.gender='M') 
+then 'M' when (epd.gender='F' OR epd.gender=' F' OR epd.gender='F ' OR epd.gender=' F ' or epd.gender='F') then  'F'
+end gender
+from empe_reg_details erd 
+inner join empe_reg_ip_aadhaar a on erd.empe_ip_number = a.IP_NUmber
+inner join empe_reg_ip_aadhaar_dep eid on eid.empe_reg_details_fk=erd.pk
+inner join empe_dependant_details ed on ed.empe_reg_details_fk=erd.pk and ed.active=1
+inner join empe_personal_details epd on epd.empe_reg_details_fk=erd.pk and epd.active=1
+inner join tbllocation tbl on erd.branch_office_fk = tbl.pk and tbl.active='Yes'
+inner join  tbllocation tbl1 on tbl.Reporting_Office = tbl1.pk and tbl1.active='Yes'
+where erd.active=1 and tbl1.pk = 784 and date(a.created_datetime) between '2023-01-01' and '2023-09-13';
+#group by tbl1.Location_Name,erd.empe_ip_number,erd.empe_name,ed.dependant_name,
+case when (epd.gender=' ' OR epd.gender='' OR epd.gender='MM' OR epd.gender=' M' OR epd.gender='FM' OR epd.gender='F M' OR epd.gender='MA'OR epd.gender='M') 
+then 'M' when (epd.gender='F' OR epd.gender=' F' OR epd.gender='F ' OR epd.gender=' F ' or epd.gender='F') then  'F'
+end;
+
+15
+
+use esicinsurance;
+select em.empr_code as employercode,efd.fact_estab_name as Nameoftheemployer,tl.location_name as Branchoffice,
+tbl.location_name as Inspectiondivision,concat(ecd.employer_address1,ecd.employer_address2,ecd.employer_address3) as address,
+rsm.description as registrationstatus,ecd.email as Email,
+ifnull(ecd.mobile,ecd.phone_number) as Mobile,td.District as District,
+#RDL.defaulting_year as year,RDL.defaulting_month as Month,
+concat(RDL.defaulting_year,',',RDL.defaulting_month) as periodofnoncompliance,
+esd.stkh_name as Nameoftheprincipalemployer,esd.stkh_present_address as Residentialaddress from empr_master em
+inner join empr_factory_details efd on efd.empr_master_fk=em.pk and efd.active=1 and em.active=1
+inner join empr_employer_cont_details ecd on ecd.empr_master_fk=em.pk and ecd.active=1
+inner join registration_status_master rsm on rsm.pk=em.registration_status_fk 
+inner join  tbldistrict td on ecd.district_fk=td.pk and td.active='Yes'
+inner join revenue_defaulter_list RDL on RDL.empr_master_fk=em.pk and RDL.status=2
+inner join empr_stkh_details esd on esd.empr_master_fk=em.pk and esd.active=1
+inner join tbllocation tl on tl.pk=em.branch_office_fk and tl.active='Yes'
+inner join tbllocation tbl on tbl.pk=em.inspection_division_fk and tbl.active='Yes'
+inner join tbllocation tbl1 on tbl1.pk=tbl.reporting_office and tbl1.active='Yes'
+where tbl1.pk=715 and RDL.defaulting_year = 2023 and RDL.defaulting_month in (1,2,3,4,5,6,7,8,9)
+group by em.empr_code,efd.fact_estab_name,concat(RDL.defaulting_year,',',RDL.defaulting_month)
+#RDL.defaulting_year,RDL.defaulting_month
+#concat(RDL.defaulting_year,',',RDL.defaulting_month)
+
+union
+
+select em.sub_code as employercode,efd.fact_estab_name as Nameoftheemployer,tl.location_name as Branchoffice,
+tbl.location_name as Inspectiondivision,concat(ecd.employer_address1,ecd.employer_address2,ecd.employer_address3) as address,
+rsm.description as registrationstatus,ecd.email as Email,
+ifnull(ecd.mobile,ecd.phone_number) as Mobile,td.District as District,
+#RDL.defaulting_year as year,RDL.defaulting_month as Month,
+concat(RDL.defaulting_year,',',RDL.defaulting_month) as periodofnoncompliance,
+esd.stkh_name as Nameoftheprincipalemployer,esd.stkh_present_address as Residentialaddress
+from empr_subunit_details em
+inner join empr_factory_details efd on efd.empr_master_fk=em.pk and efd.active=1 and em.active=1
+inner join empr_employer_cont_details ecd on ecd.empr_master_fk=em.pk and ecd.active=1
+inner join registration_status_master rsm on rsm.pk=em.reg_status_fk 
+inner join  tbldistrict td on ecd.district_fk=td.pk and td.active='Yes'
+inner join revenue_defaulter_list RDL on RDL.empr_subunit_details_fk=em.pk and RDL.status=2
+inner join empr_stkh_details esd on esd.empr_master_fk=em.pk and esd.active=1
+inner join tbllocation tl on tl.pk=em.branch_office_fk and tl.active='Yes'
+inner join tbllocation tbl on tbl.pk=em.inspection_division_fk and tbl.active='Yes'
+inner join tbllocation tbl1 on tbl1.pk=tbl.reporting_office and tbl1.active='Yes'
+where tbl1.pk=715 and RDL.defaulting_year =2023 and RDL.defaulting_month in (1,2,3,4,5,6,7,8,9)
+group by em.sub_code,efd.fact_estab_name,concat(RDL.defaulting_year,',',RDL.defaulting_month);
+
+
+
+
